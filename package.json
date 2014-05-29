@@ -1,0 +1,32 @@
+{
+  "name": "dispatchr",
+  "version": "0.0.0",
+  "description": "A dispatcher to aid in following the Flux application architecture for applications that run in the server and the client",
+  "main": "index.js",
+  "scripts": {
+    "cover": "node node_modules/istanbul/lib/cli.js cover --dir artifacts -- ./node_modules/mocha/bin/_mocha tests/unit/ --recursive --reporter spec",
+    "lint": "./node_modules/.bin/jshint lib tests",
+    "test": "./node_modules/.bin/mocha tests/unit/ --recursive --reporter spec"
+  },
+  "author": "Michael Ridgway <mridgway@yahoo-inc.com",
+  "licenses": [
+    {
+      "type": "Yahoo BSD",
+      "url": "https://github.com/yahoo/ypromise/blob/master/LICENSE.md"
+    }
+  ],
+  "dependencies": {
+    "bluebird": "^1.2.4",
+    "debug": "^0.8.1"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "istanbul": "^0.2.10",
+    "jshint": "^2.5.1",
+    "mocha": "^1.20.0",
+    "precommit-hook": "^1.0.2"
+  },
+  "jshintConfig": {
+    "node": true
+  }
+}
