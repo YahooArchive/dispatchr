@@ -1,0 +1,13 @@
+{
+  "name": "dispatchr-simple-example",
+  "version": "0.0.0",
+  "description": "Example application",
+  "main": "app.js",
+  "author": "Michael Ridgway <mridgway@yahoo-inc.com",
+  "dependencies": {
+    "envify": "^1.2.1",
+    "node-jsx": "^0.10.0",
+    "react": "^0.10.0"
+  },
+  "devDependencies": {}
+}
