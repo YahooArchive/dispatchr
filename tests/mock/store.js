@@ -16,10 +16,23 @@ Store.prototype.setDispatcher = function (dispatcher) {
     this.dispatcher = dispatcher;
 };
 
-Store.prototype.delay = function (/*payload*/) {
+Store.prototype.navigate = function (/*payload*/) {
     this.state.called = true;
     this.state.page = 'home';
     this.emit('final');
+};
+
+Store.prototype.delay = function (/*payload*/) {
+    var self = this;
+    self.state.called = true;
+    self.dispatcher.waitFor('DelayedStore', function () {
+        var delayedStore = self.dispatcher.getStore('DelayedStore');
+        if (!delayedStore.getState().final) {
+            throw new Error('Delayed store didn\'t finish first!');
+        }
+        self.state.page = 'delay';
+        self.emit('final');
+    });
 };
 
 Store.prototype.getState = function () {
@@ -27,7 +40,8 @@ Store.prototype.getState = function () {
 };
 
 Store.handlers = {
-    'VIEW_SOMETHING': 'delay'
+    'NAVIGATE': 'navigate',
+    'DELAY': 'delay'
 };
 
 module.exports = Store;

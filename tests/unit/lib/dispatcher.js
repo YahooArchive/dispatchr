@@ -21,10 +21,10 @@ describe('StoreManager', function () {
         expect(Dispatcher.stores).to.be.an('object');
         expect(Dispatcher.stores.Store).to.be.a('function');
         expect(Dispatcher.handlers).to.be.an('object');
-        expect(Dispatcher.handlers.VIEW_SOMETHING).to.be.an('array');
-        expect(Dispatcher.handlers.VIEW_SOMETHING.length).to.equal(1);
-        expect(Dispatcher.handlers.VIEW_SOMETHING[0].name).to.equal('Store');
-        expect(Dispatcher.handlers.VIEW_SOMETHING[0].handler).to.equal('delay');
+        expect(Dispatcher.handlers.NAVIGATE).to.be.an('array');
+        expect(Dispatcher.handlers.NAVIGATE.length).to.equal(1);
+        expect(Dispatcher.handlers.NAVIGATE[0].name).to.equal('Store');
+        expect(Dispatcher.handlers.NAVIGATE[0].handler).to.equal('navigate');
     });
 
     describe('#dispatch', function () {
@@ -32,7 +32,7 @@ describe('StoreManager', function () {
             var context = {test: 'test'},
                 dispatcher = new Dispatcher(context);
 
-            dispatcher.dispatch('VIEW_SOMETHING', {}, function (err) {
+            dispatcher.dispatch('NAVIGATE', {}, function (err) {
                 expect(dispatcher.storeInstances).to.be.an('object');
                 expect(dispatcher.storeInstances.Store).to.be.an('object');
                 var mockStore = dispatcher.storeInstances.Store;
@@ -41,6 +41,17 @@ describe('StoreManager', function () {
                 expect(state.called).to.equal(true);
                 expect(state.page).to.equal('home');
                 done(err);
+            });
+        });
+
+        it('should allow stores to wait for other stores', function (done) {
+            var context = {test: 'test'},
+                dispatcher = new Dispatcher(context),
+                delayFinished = false;
+
+            dispatcher.dispatch('DELAY', {}, function () {
+                delayFinished = true;
+                done();
             });
         });
 
@@ -53,7 +64,7 @@ describe('StoreManager', function () {
                 delayFinished = true;
             });
 
-            dispatcher.dispatch('VIEW_SOMETHING', {}, function () {
+            dispatcher.dispatch('NAVIGATE', {}, function () {
                 if (delayFinished) {
                     done();
                 } else {
@@ -81,7 +92,7 @@ describe('StoreManager', function () {
             dispatcher = new Dispatcher(context);
         });
         it('should dehydrate correctly', function (done) {
-            dispatcher.dispatch('VIEW_SOMETHING', {}, function () {
+            dispatcher.dispatch('NAVIGATE', {}, function () {
                 var state = dispatcher.toJSON();
                 expect(state).to.deep.equal(expectedState);
                 done();

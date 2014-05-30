@@ -8,7 +8,9 @@ var util = require('util'),
 function DelayedStore(context) {
     this.called = false;
     this.context = context;
-    this.state = {};
+    this.state = {
+        final: false
+    };
     this.dependencies = {};
 }
 
@@ -20,6 +22,8 @@ DelayedStore.prototype.delay = function (payload, dependencies) {
     self.state.page = 'home';
     self.dependencies = dependencies;
     setTimeout(function () {
+        self.state.final = true;
+        console.log('delay finish');
         self.emit('final');
     }, 10);
 };
