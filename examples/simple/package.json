@@ -4,10 +4,20 @@
   "description": "Example application",
   "main": "app.js",
   "author": "Michael Ridgway <mridgway@yahoo-inc.com",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack"
+  },
   "dependencies": {
     "envify": "^1.2.1",
+    "express": "^4.3.2",
+    "express-state": "^1.2.0",
+    "jade": "^1.3.1",
     "node-jsx": "^0.10.0",
     "react": "^0.10.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jsx-loader": "^0.10.2",
+    "setimmediate": "^1.0.2",
+    "webpack": "^1.2.0-beta6"
+  }
 }
