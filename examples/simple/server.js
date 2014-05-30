@@ -1,3 +1,7 @@
+/**
+ * Copyright 2014, Yahoo! Inc.
+ * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ */
 require('node-jsx').install({ extension: '.jsx' });
 var http = require('http'),
     express = require('express'),
@@ -24,7 +28,7 @@ app.use(function (req, res, next) {
         url: req.url
     }, function (err) {
         if (err) {
-            next();
+            next(err);
             return;
         }
         var appComponent = Application({dispatcher: dispatcher});

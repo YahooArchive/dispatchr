@@ -2,12 +2,14 @@
   "name": "dispatchr-simple-example",
   "version": "0.0.0",
   "description": "Example application",
-  "main": "app.js",
+  "main": "server.js",
   "author": "Michael Ridgway <mridgway@yahoo-inc.com",
   "scripts": {
-    "build": "./node_modules/.bin/webpack"
+    "build": "./node_modules/.bin/webpack",
+    "postinstall": "npm run build"
   },
   "dependencies": {
+    "debug": "^0.8.1",
     "envify": "^1.2.1",
     "express": "^4.3.2",
     "express-state": "^1.2.0",

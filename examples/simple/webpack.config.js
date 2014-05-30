@@ -1,10 +1,10 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: "./bootstrap.js",
+    entry: "./client.js",
     output: {
         path: __dirname+'/build/js',
-        filename: "bootstrap.js"
+        filename: "client.js"
     },
     module: {
         loaders: [
