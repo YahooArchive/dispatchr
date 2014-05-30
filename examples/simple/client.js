@@ -2,6 +2,8 @@
  * Copyright 2014, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
+/*global App, document, window */
+'use strict';
 require('setimmediate');
 var React = require('react/addons'),
     Dispatchr = require('../../index'),
@@ -25,7 +27,7 @@ dispatcher.dispatch('BOOTSTRAP', {}, function () {
         mountNode = document.getElementById('app');
 
     bootstrapDebug('React Rendering');
-    React.renderComponent(app, mountNode, function (err) {
+    React.renderComponent(app, mountNode, function () {
         bootstrapDebug('React Rendered');
     });
 });
