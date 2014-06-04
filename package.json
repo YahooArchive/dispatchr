@@ -1,7 +1,7 @@
 {
   "name": "dispatchr",
   "version": "0.0.5",
-  "description": "A dispatcher to aid in following the Flux application architecture for applications that run in the server and the client",
+  "description": "A Flux dispatcher for applications that run on the server and the client.",
   "main": "index.js",
   "repository": {
     "type": "git",
