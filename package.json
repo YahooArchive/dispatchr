@@ -20,8 +20,8 @@
     }
   ],
   "dependencies": {
-    "bluebird": "^1.2.4",
-    "debug": "^0.8.1"
+    "debug": "^0.8.1",
+    "es6-promise": "^1.0.0"
   },
   "devDependencies": {
     "chai": "^1.9.1",
