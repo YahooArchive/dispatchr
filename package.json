@@ -3,6 +3,10 @@
   "version": "0.0.5",
   "description": "A dispatcher to aid in following the Flux application architecture for applications that run in the server and the client",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mridgway/dispatchr.git",
+  },
   "scripts": {
     "cover": "node node_modules/istanbul/lib/cli.js cover --dir artifacts -- ./node_modules/mocha/bin/_mocha tests/unit/ --recursive --reporter spec",
     "lint": "./node_modules/.bin/jshint lib tests",
