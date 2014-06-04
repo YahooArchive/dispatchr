@@ -32,5 +32,10 @@
   },
   "jshintConfig": {
     "node": true
-  }
+  },
+  "keywords": [
+    "flux",
+    "react",
+    "dispatcher"
+  ]
 }
