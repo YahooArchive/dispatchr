@@ -6,6 +6,8 @@ A [Flux](http://facebook.github.io/react/docs/flux-overview.html) dispatcher for
 Usage
 -----
 
+For a more detailed example, see our [example application](https://github.com/mridgway/dispatchr/tree/master/examples/simple).
+
 Let's start with a store that can handle the actions:
 
 ```js
