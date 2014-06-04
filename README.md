@@ -1,7 +1,7 @@
 Dispatchr
 =========
 
-A dispatcher to aid in following the Flux application architecture for applications that run in the server and the client.
+A [Flux](http://facebook.github.io/react/docs/flux-overview.html) dispatcher for applications that run on the server and the client.
 
 Usage
 -----
