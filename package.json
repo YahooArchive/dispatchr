@@ -11,8 +11,8 @@
   "author": "Michael Ridgway <mridgway@yahoo-inc.com",
   "licenses": [
     {
-      "type": "Yahoo BSD",
-      "url": "https://github.com/yahoo/ypromise/blob/master/LICENSE.md"
+      "type": "BSD",
+      "url": "https://github.com/yahoo/dispatchr/blob/master/LICENSE.md"
     }
   ],
   "dependencies": {
