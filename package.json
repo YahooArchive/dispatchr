@@ -20,7 +20,7 @@
     }
   ],
   "dependencies": {
-    "debug": "^0.8.1",
+    "debug": "^1.0.0",
     "es6-promise": "^1.0.0"
   },
   "devDependencies": {
