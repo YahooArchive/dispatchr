@@ -22,6 +22,11 @@ Store.prototype.navigate = function (/*payload*/) {
     this.emit('final');
 };
 
+Store.prototype.error = function (/*payload*/) {
+    this.state.called = true;
+    this.emit('error', new Error('This is an error'));
+};
+
 Store.prototype.delay = function (/*payload*/) {
     var self = this;
     self.state.called = true;
@@ -41,7 +46,8 @@ Store.prototype.getState = function () {
 
 Store.handlers = {
     'NAVIGATE': 'navigate',
-    'DELAY': 'delay'
+    'DELAY': 'delay',
+    'ERROR': 'error'
 };
 
 module.exports = Store;

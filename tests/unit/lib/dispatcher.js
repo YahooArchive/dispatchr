@@ -26,6 +26,39 @@ describe('StoreManager', function () {
         expect(Dispatcher.handlers.NAVIGATE[0].name).to.equal('Store');
         expect(Dispatcher.handlers.NAVIGATE[0].handler).to.equal('navigate');
     });
+    describe('#registerStore', function () {
+        it('should throw if store is already registered', function () {
+            expect(function () {
+                Dispatcher.registerStore(function Store () {});
+            }).to.throw(Error);
+        });
+    });
+
+    describe('#getStore', function () {
+        it('should give me the same store instance', function () {
+            var dispatcher = new Dispatcher({}),
+                mockStoreInstance = dispatcher.getStore('Store');
+
+            expect(mockStoreInstance).to.be.an('object');
+
+            expect(dispatcher.getStore('Store')).to.equal(mockStoreInstance);
+        });
+        it('should allow passing constructor instead of class name', function () {
+            var dispatcher = new Dispatcher({}),
+                mockStoreInstance = dispatcher.getStore(mockStore);
+
+            expect(mockStoreInstance).to.be.an('object');
+
+            expect(dispatcher.getStore('Store')).to.equal(mockStoreInstance);
+        });
+        it('should throw if name is invalid', function () {
+            var dispatcher = new Dispatcher({});
+
+            expect(function () {
+                dispatcher.getStore('Invalid');
+            }).to.throw(Error);
+        });
+    });
 
     describe('#dispatch', function () {
         it('should dispatch to store', function (done) {
@@ -46,11 +79,9 @@ describe('StoreManager', function () {
 
         it('should allow stores to wait for other stores', function (done) {
             var context = {test: 'test'},
-                dispatcher = new Dispatcher(context),
-                delayFinished = false;
+                dispatcher = new Dispatcher(context);
 
             dispatcher.dispatch('DELAY', {}, function () {
-                delayFinished = true;
                 done();
             });
         });
@@ -72,6 +103,50 @@ describe('StoreManager', function () {
                 }
             });
         });
+
+        it('should asynchronously call back if no actions registered', function (done) {
+            var dispatcher = new Dispatcher({}),
+                callbackCalled = false;
+
+            dispatcher.dispatch('INVALID', {}, function () {
+                callbackCalled = true;
+                done();
+            });
+
+            expect(callbackCalled).to.equal(false);
+        });
+
+        it('should call the callback with error if the store emitted error', function (done) {
+            var dispatcher = new Dispatcher({});
+
+            dispatcher.dispatch('ERROR', {}, function (err) {
+                expect(err).to.be.an('object');
+                done();
+            });
+        });
+    });
+
+    describe('#waitFor', function () {
+        it('should call the callback with error if the store emitted error', function (done) {
+            var dispatcher = new Dispatcher({});
+
+            dispatcher.dispatch('ERROR', {}, function (err) {
+                expect(err).to.be.an('object');
+                done();
+            });
+
+            dispatcher.waitFor('Store', function (err) {
+                expect(err).to.be.an('object');
+            });
+        });
+
+        it('should throw if there is no action being handled', function () {
+            var dispatcher = new Dispatcher({});
+
+            expect(function () {
+                dispatcher.waitFor(['MockStore']);
+            }).to.throw(Error);
+        });
     });
 
     describe('#toJSON', function () {
@@ -85,16 +160,21 @@ describe('StoreManager', function () {
                 stores: {
                     Store: {
                         called: true,
-                        page: 'home'
+                        page: 'delay'
+                    },
+                    DelayedStore: {
+                        final: true,
+                        page: 'delay'
                     }
                 }
             };
             dispatcher = new Dispatcher(context);
         });
+
         it('should dehydrate correctly', function (done) {
-            dispatcher.dispatch('NAVIGATE', {}, function () {
+            dispatcher.dispatch('DELAY', {}, function () {
                 var state = dispatcher.toJSON();
-                expect(state).to.deep.equal(expectedState);
+                    expect(state).to.deep.equal(expectedState);
                 done();
             });
         });
@@ -108,7 +188,7 @@ describe('StoreManager', function () {
             expect(mockStore.dispatcher).to.equal(dispatcher);
             var state = mockStore.getState();
             expect(state.called).to.equal(true);
-            expect(state.page).to.equal('home');
+            expect(state.page).to.equal('delay');
         });
     });
 

@@ -19,16 +19,19 @@ util.inherits(DelayedStore, EventEmitter);
 DelayedStore.prototype.delay = function (payload, dependencies) {
     var self = this;
     self.called = true;
-    self.state.page = 'home';
+    self.state.page = 'delay';
     self.dependencies = dependencies;
     setTimeout(function () {
         self.state.final = true;
-        console.log('delay finish');
         self.emit('final');
     }, 10);
 };
 
 DelayedStore.prototype.getState = function () {
+    return this.state;
+};
+
+DelayedStore.prototype.toJSON = function () {
     return this.state;
 };
 
