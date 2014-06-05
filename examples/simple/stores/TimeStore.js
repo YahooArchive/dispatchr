@@ -14,6 +14,8 @@ function TimeStore(context, initialState) {
     }
 }
 
+TimeStore.storeName = 'TimeStore';
+
 util.inherits(TimeStore, EventEmitter);
 
 TimeStore.prototype.reset = function (callback) {

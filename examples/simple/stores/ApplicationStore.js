@@ -25,11 +25,12 @@ function ApplicationStore(context, initialState) {
     ];
 }
 
-util.inherits(ApplicationStore, EventEmitter);
-
+ApplicationStore.storeName = 'ApplicationStore';
 ApplicationStore.handlers = {
     'NAVIGATE': 'handleNavigate'
 };
+
+util.inherits(ApplicationStore, EventEmitter);
 
 ApplicationStore.prototype.setDispatcher = function (dispatcher) {
     this.dispatcher = dispatcher;

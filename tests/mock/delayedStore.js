@@ -14,6 +14,7 @@ function DelayedStore(context) {
     this.dependencies = {};
 }
 
+DelayedStore.storeName = 'DelayedStore';
 util.inherits(DelayedStore, EventEmitter);
 
 DelayedStore.prototype.delay = function (payload, dependencies) {
