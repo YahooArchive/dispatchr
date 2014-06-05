@@ -18,6 +18,8 @@ function ExampleStore(context) {
     this.navigating = false;
 }
 
+ExampleStore.storeName = 'ExampleStore';
+
 util.inherits(ExampleStore, EventEmitter);
 
 ExampleStore.handlers = {

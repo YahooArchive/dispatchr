@@ -10,6 +10,7 @@ function Store(context, initialState) {
     this.state = initialState || {};
 }
 
+Store.storeName = 'Store';
 util.inherits(Store, EventEmitter);
 
 Store.prototype.setDispatcher = function (dispatcher) {
