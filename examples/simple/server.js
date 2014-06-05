@@ -8,10 +8,12 @@ var http = require('http'),
     expressState = require('express-state'),
     React = require('react/addons'),
     Dispatchr = require('../../index'),
-    ExampleStore = require('./stores/ExampleStore'),
+    ApplicationStore = require('./stores/ApplicationStore'),
+    TimeStore = require('./stores/TimeStore'),
     Application = require('./components/Application.jsx');
 
-Dispatchr.registerStore(ExampleStore);
+Dispatchr.registerStore(ApplicationStore);
+Dispatchr.registerStore(TimeStore);
 
 var app = express();
 expressState.extend(app);

@@ -4,12 +4,19 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-var React = require('react/addons');
+var React = require('react/addons'),
+    Nav = require('./Nav.jsx'),
+    Home = require('./Home.jsx'),
+    About = require('./About.jsx'),
+    Timestamp = require('./Timestamp.jsx');
 
 var Application = React.createClass({
     getInitialState: function () {
-        this.store = this.props.dispatcher.getStore('ExampleStore');
+        this.store = this.props.dispatcher.getStore('ApplicationStore');
         return this.store.getState();
+    },
+    onNavigate: function (payload) {
+        this.props.dispatcher.dispatch('NAVIGATE', payload);
     },
     componentDidMount: function() {
         var self = this;
@@ -18,10 +25,17 @@ var Application = React.createClass({
             self.setState(state);
         });
     },
+    componentDidUpdate: function(prevProps, prevState) {
+        if (prevState.url !== this.state.url) {
+            window.history.pushState({}, '', this.state.url);
+        }
+    },
     render: function() {
         return (
             <div>
-                <h1>This is the {this.state.url} route!</h1>
+                <Nav selected={this.state.page} links={this.state.pages} onNavigate={this.onNavigate} />
+                {'home' === this.state.page ? <Home/> : <About/>}
+                <Timestamp dispatcher={this.props.dispatcher}/>
             </div>
         );
     }

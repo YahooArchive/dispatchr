@@ -9,7 +9,7 @@
     "postinstall": "npm run build"
   },
   "dependencies": {
-    "debug": "^0.8.1",
+    "debug": "^1.0.0",
     "envify": "^1.2.1",
     "express": "^4.3.2",
     "express-state": "^1.2.0",
