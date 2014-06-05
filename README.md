@@ -1,4 +1,4 @@
-Dispatchr [![Build Status](https://travis-ci.org/mridgway/dispatchr.svg?branch=master)](https://travis-ci.org/mridgway/dispatchr)
+Dispatchr [![Build Status](https://travis-ci.org/mridgway/dispatchr.svg?branch=master)](https://travis-ci.org/mridgway/dispatchr) [![Dependency Status](https://david-dm.org/mridgway/dispatchr.svg)](https://david-dm.org/mridgway/dispatchr)
 =========
 
 A [Flux](http://facebook.github.io/react/docs/flux-overview.html) dispatcher for applications that run on the server and the client.
