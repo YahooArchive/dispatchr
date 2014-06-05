@@ -7,7 +7,8 @@
 require('setimmediate');
 var React = require('react/addons'),
     Dispatchr = require('../../index'),
-    ExampleStore = require('./stores/ExampleStore'),
+    ApplicationStore = require('./stores/ApplicationStore'),
+    TimeStore = require('./stores/TimeStore'),
     Application = require('./components/Application.jsx'),
     debug = require('debug'),
     bootstrapDebug = debug('Example:bootstrap');
@@ -15,7 +16,8 @@ var React = require('react/addons'),
 window.React = React; // For chrome dev tool support
 debug.enable('*');
 
-Dispatchr.registerStore(ExampleStore);
+Dispatchr.registerStore(ApplicationStore);
+Dispatchr.registerStore(TimeStore);
 
 var dispatcher = new Dispatchr({});
 bootstrapDebug('rehydrating dispatcher');
