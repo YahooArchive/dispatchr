@@ -10,33 +10,36 @@ function TimeStore(context, initialState) {
     initialState = initialState || {};
     this.time = initialState.time;
     if (!this.time) {
-        this.reset();
+        this.time = new Date();
     }
 }
 
 util.inherits(TimeStore, EventEmitter);
 
-TimeStore.prototype.reset = function () {
-    var date = new Date();
-    this.time = date.toString();
-    debug('time updated');
-    this.emit('update');
+TimeStore.prototype.reset = function (callback) {
+    var self = this;
+    // Simulate async API call
+    setTimeout(function () {
+        var date = new Date();
+        self.time = date.toString();
+        debug('time updated');
+        self.emit('update');
+        callback();
+    }, 100);
 };
 
 TimeStore.prototype.handleReset = function () {
     var self = this;
-    // Simulate async API call
-    setTimeout(function () {
-        self.reset();
+    self.reset(function () {
         self.emit('final');
-    }, 100);
+    });
 };
 
 TimeStore.prototype.handleBootstrap = function () {
     var self = this;
     // Simulate polling/push state
     setInterval(function () {
-        self.reset();
+        self.reset(function () {});
     }, 5000);
     self.emit('final');
 };

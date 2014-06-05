@@ -48,11 +48,14 @@ ApplicationStore.prototype.handleNavigate = function (payload) {
     if (newPage && newPage.name !== self.page ) {
         self.page = newPage.name;
         self.url = newPage.url;
-        timeStore.reset();
-        debug('page switched to ' + self.page);
-        self.emit('update'); // Store may be listening for updates to state
+        timeStore.reset(function () {
+            debug('page switched to ' + self.page);
+            self.emit('update'); // Store may be listening for updates to state
+            self.emit('final');
+        });
+    } else {
+        self.emit('final'); // Action has been fully handled
     }
-    self.emit('final'); // Action has been fully handled
 };
 
 ApplicationStore.prototype.getState = function () {
