@@ -26,11 +26,28 @@ describe('StoreManager', function () {
         expect(Dispatcher.handlers.NAVIGATE[0].name).to.equal('Store');
         expect(Dispatcher.handlers.NAVIGATE[0].handler).to.equal('navigate');
     });
+
     describe('#registerStore', function () {
         it('should throw if store is already registered', function () {
             expect(function () {
                 Dispatcher.registerStore(function Store () {});
             }).to.throw(Error);
+        });
+    });
+
+    describe('#isRegistered', function () {
+        it('should return true if store name is registered', function () {
+            expect(Dispatcher.isRegistered('Store')).to.equal(true);
+        });
+
+        it('should return false if store name is not registered', function () {
+            expect(Dispatcher.isRegistered('foo')).to.equal(false);
+        });
+
+        it('should return false if store with same name is different constructor', function () {
+            var store = function () {};
+            store.storeName = 'Store';
+            expect(Dispatcher.isRegistered(store)).to.equal(false);
         });
     });
 
