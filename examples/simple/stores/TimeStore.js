@@ -30,20 +30,20 @@ TimeStore.prototype.reset = function (callback) {
     }, 100);
 };
 
-TimeStore.prototype.handleReset = function () {
+TimeStore.prototype.handleReset = function (payload, done) {
     var self = this;
     self.reset(function () {
-        self.emit('final');
+        done();
     });
 };
 
-TimeStore.prototype.handleBootstrap = function () {
+TimeStore.prototype.handleBootstrap = function (payload, done) {
     var self = this;
     // Simulate polling/push state
     setInterval(function () {
         self.reset(function () {});
     }, 5000);
-    self.emit('final');
+    done();
 };
 
 TimeStore.handlers = {
