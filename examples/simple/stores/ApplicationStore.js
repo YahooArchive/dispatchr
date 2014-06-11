@@ -36,7 +36,7 @@ ApplicationStore.prototype.setDispatcher = function (dispatcher) {
     this.dispatcher = dispatcher;
 };
 
-ApplicationStore.prototype.handleNavigate = function (payload) {
+ApplicationStore.prototype.handleNavigate = function (payload, done) {
     var self = this,
         newPage = null,
         timeStore = this.dispatcher.getStore(TimeStore);
@@ -52,10 +52,10 @@ ApplicationStore.prototype.handleNavigate = function (payload) {
         timeStore.reset(function () {
             debug('page switched to ' + self.page);
             self.emit('update'); // Store may be listening for updates to state
-            self.emit('final');
+            done();
         });
     } else {
-        self.emit('final'); // Action has been fully handled
+        done(); // Action has been fully handled
     }
 };
 

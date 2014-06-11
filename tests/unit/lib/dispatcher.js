@@ -133,7 +133,7 @@ describe('StoreManager', function () {
             expect(callbackCalled).to.equal(false);
         });
 
-        it('should call the callback with error if the store emitted error', function (done) {
+        it('should call the callback with error if the store returned error', function (done) {
             var dispatcher = new Dispatcher({});
 
             dispatcher.dispatch('ERROR', {}, function (err) {
@@ -144,7 +144,7 @@ describe('StoreManager', function () {
     });
 
     describe('#waitFor', function () {
-        it('should call the callback with error if the store emitted error', function (done) {
+        it('should call the callback with error if the store returned error', function (done) {
             var dispatcher = new Dispatcher({});
 
             dispatcher.dispatch('ERROR', {}, function (err) {
