@@ -26,10 +26,10 @@ ExampleStore.handlers = {
     'NAVIGATE': 'handleNavigate'
 };
 
-ExampleStore.prototype.handleNavigate = function () {
+ExampleStore.prototype.handleNavigate = function (payload, done) {
     this.navigating = true;
-    this.emit('update'); // Store may be listening for updates to state
-    this.emit('final'); // Action has been fully handled
+    this.emit('update'); // Component may be listening for updates to state
+    done(); // Action has been fully handled
 };
 
 ExampleStore.prototype.getState = function () {
@@ -49,7 +49,7 @@ Dispatchr.registerStore(ExampleStore);
 
 var dispatcher = new Dispatchr(context);
 
-dispatcher.dispatch('NAVIGATE', {}, function () {
+dispatcher.dispatch('NAVIGATE', {}, function (err) {
     // Action has been handled fully
 });
 ```
