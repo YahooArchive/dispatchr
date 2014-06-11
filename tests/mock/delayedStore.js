@@ -11,20 +11,18 @@ function DelayedStore(context) {
     this.state = {
         final: false
     };
-    this.dependencies = {};
 }
 
 DelayedStore.storeName = 'DelayedStore';
 util.inherits(DelayedStore, EventEmitter);
 
-DelayedStore.prototype.delay = function (payload, dependencies) {
+DelayedStore.prototype.delay = function (payload, done) {
     var self = this;
     self.called = true;
     self.state.page = 'delay';
-    self.dependencies = dependencies;
     setTimeout(function () {
         self.state.final = true;
-        self.emit('final');
+        done();
     }, 10);
 };
 

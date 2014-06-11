@@ -17,18 +17,18 @@ Store.prototype.setDispatcher = function (dispatcher) {
     this.dispatcher = dispatcher;
 };
 
-Store.prototype.navigate = function (/*payload*/) {
+Store.prototype.navigate = function (payload, done) {
     this.state.called = true;
     this.state.page = 'home';
-    this.emit('final');
+    done();
 };
 
-Store.prototype.error = function (/*payload*/) {
+Store.prototype.error = function (payload, done) {
     this.state.called = true;
-    this.emit('error', new Error('This is an error'));
+    done(new Error('This is an error'));
 };
 
-Store.prototype.delay = function (/*payload*/) {
+Store.prototype.delay = function (payload, done) {
     var self = this;
     self.state.called = true;
     self.dispatcher.waitFor('DelayedStore', function () {
@@ -37,7 +37,7 @@ Store.prototype.delay = function (/*payload*/) {
             throw new Error('Delayed store didn\'t finish first!');
         }
         self.state.page = 'delay';
-        self.emit('final');
+        done();
     });
 };
 
