@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mridgway/dispatchr.git"
+    "url": "git://github.com/ouchtown/dispatchr.git"
   },
   "scripts": {
     "cover": "node node_modules/istanbul/lib/cli.js cover --dir artifacts -- ./node_modules/mocha/bin/_mocha tests/unit/ --recursive --reporter spec",
@@ -16,7 +16,7 @@
   "licenses": [
     {
       "type": "BSD",
-      "url": "https://github.com/yahoo/dispatchr/blob/master/LICENSE.md"
+      "url": "https://github.com/ouchtown/dispatchr/blob/master/LICENSE.md"
     }
   ],
   "dependencies": {
