@@ -1,4 +1,4 @@
-Dispatchr [![Build Status](https://travis-ci.org/mridgway/dispatchr.svg?branch=master)](https://travis-ci.org/mridgway/dispatchr) [![Dependency Status](https://david-dm.org/mridgway/dispatchr.svg)](https://david-dm.org/mridgway/dispatchr)
+Dispatchr [![Build Status](https://travis-ci.org/mridgway/dispatchr.svg?branch=master)](https://travis-ci.org/ouchtown/dispatchr) [![Dependency Status](https://david-dm.org/ouchtown/dispatchr.svg)](https://david-dm.org/ouchtown/dispatchr)
 =========
 
 A [Flux](http://facebook.github.io/react/docs/flux-overview.html) dispatcher for applications that run on the server and the client.
@@ -6,7 +6,7 @@ A [Flux](http://facebook.github.io/react/docs/flux-overview.html) dispatcher for
 Usage
 -----
 
-For a more detailed example, see our [example application](https://github.com/mridgway/dispatchr/tree/master/examples/simple).
+For a more detailed example, see our [example application](https://github.com/ouchtown/dispatchr/tree/master/examples/simple).
 
 Let's start with a store that can handle the actions:
 
@@ -60,4 +60,4 @@ License
 This software is free to use under the Yahoo! Inc. BSD license.
 See the [LICENSE file][] for license text and copyright information.
 
-[LICENSE file]: https://github.com/mridgway/dispatchr/blob/master/LICENSE.md
+[LICENSE file]: https://github.com/ouchtown/dispatchr/blob/master/LICENSE.md
