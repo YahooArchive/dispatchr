@@ -1,10 +1,10 @@
-# Dispatchr [![Build Status](https://travis-ci.org/ouchtown/dispatchr.svg?branch=master)](https://travis-ci.org/ouchtown/dispatchr) [![Dependency Status](https://david-dm.org/ouchtown/dispatchr.svg)](https://david-dm.org/ouchtown/dispatchr)
+# Dispatchr [![Build Status](https://travis-ci.org/yahoo/dispatchr.svg?branch=master)](https://travis-ci.org/yahoo/dispatchr) [![Dependency Status](https://david-dm.org/yahoo/dispatchr.svg)](https://david-dm.org/yahoo/dispatchr)
 
 A [Flux](http://facebook.github.io/react/docs/flux-overview.html) dispatcher for applications that run on the server and the client.
 
 ## Usage
 
-For a more detailed example, see our [example application](https://github.com/ouchtown/flux-example).
+For a more detailed example, see our [example application](https://github.com/yahoo/flux-example).
 
 ```js
 var Dispatchr = require('dispatchr'),
@@ -145,4 +145,4 @@ The store can optionally define this function to customize the dehydration of th
 This software is free to use under the Yahoo! Inc. BSD license.
 See the [LICENSE file][] for license text and copyright information.
 
-[LICENSE file]: https://github.com/ouchtown/dispatchr/blob/master/LICENSE.md
+[LICENSE file]: https://github.com/yahoo/dispatchr/blob/master/LICENSE.md
