@@ -7,7 +7,7 @@ A [Flux](http://facebook.github.io/react/docs/flux-overview.html) dispatcher for
 For a more detailed example, see our [example application](https://github.com/yahoo/flux-example).
 
 ```js
-var Dispatchr = require('dispatchr'),
+var Dispatchr = require('dispatchr')(),
     ExampleStore = require('./example-store.js'),
     context = {};
 

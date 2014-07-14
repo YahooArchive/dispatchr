@@ -6,15 +6,22 @@
 'use strict';
 
 var expect = require('chai').expect,
-    Dispatcher = require('../../../lib/dispatcher'),
+    Dispatcher = require('../../../lib/dispatcher')(),
     mockStore = require('../../mock/store'),
     delayedStore = require('../../mock/delayedStore');
 
-describe('StoreManager', function () {
+describe('Dispatchr', function () {
 
     before(function () {
         Dispatcher.registerStore(mockStore);
         Dispatcher.registerStore(delayedStore);
+    });
+
+    it('should not bleed between requires', function () {
+        var Dispatcher2 = require('../../../lib/dispatcher')();
+        expect(Dispatcher2.isRegistered(mockStore)).to.equal(false);
+        Dispatcher2.registerStore(delayedStore);
+        expect(Dispatcher2.isRegistered(delayedStore)).to.equal(true);
     });
 
     it('should have handlers registered', function () {
