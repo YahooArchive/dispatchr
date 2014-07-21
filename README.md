@@ -109,7 +109,7 @@ The handler function will be passed two parameters:
 ```js
 ExampleStore.prototype.handleNavigate = function (payload, done) {
     this.navigating = true;
-    this.emit('update'); // Component may be listening for updates to state
+    this.emit('change'); // Component may be listening for changes to state
     done(); // Action has been fully handled
 };
 ```
