@@ -21,7 +21,8 @@
   ],
   "dependencies": {
     "debug": "^1.0.0",
-    "es6-promise": "^1.0.0"
+    "es6-promise": "^1.0.0",
+    "setimmediate": "^1.0.2"
   },
   "devDependencies": {
     "chai": "^1.9.1",
