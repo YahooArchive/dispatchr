@@ -76,7 +76,7 @@ function ExampleStore(context, initialState) {
 }
 ```
 
-It is also recommended to extend an event emitter so that your store can emit `update` events to the components.
+It is also recommended to extend an event emitter so that your store can emit `change` events to the components.
 
 ```js
 util.inherits(ExampleStore, EventEmitter);
