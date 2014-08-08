@@ -15,9 +15,8 @@ Dispatchr.registerStore(ExampleStore);
 
 var dispatcher = new Dispatchr(context);
 
-dispatcher.dispatch('NAVIGATE', {}, function (err) {
-    // Action has been handled fully
-});
+dispatcher.dispatch('NAVIGATE', {});
+// Action has been handled fully
 ```
 
 ## Dispatcher Interface
