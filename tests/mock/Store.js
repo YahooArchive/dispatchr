@@ -4,7 +4,7 @@
  */
 var util = require('util'),
     EventEmitter = require('events').EventEmitter,
-    DelayedStore = require('./delayedStore');
+    DelayedStore = require('./DelayedStore');
 
 function Store(dispatcher) {
     this.dispatcher = dispatcher;
