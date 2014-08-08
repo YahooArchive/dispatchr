@@ -8,15 +8,13 @@
 var expect = require('chai').expect,
     Dispatcher = require('../../../lib/dispatcher')(),
     mockStore = require('../../mock/store'),
-    delayedStore = require('../../mock/delayedStore'),
-    promiseStore = require('../../mock/promiseStore');
+    delayedStore = require('../../mock/delayedStore');
 
 describe('Dispatchr', function () {
 
     before(function () {
         Dispatcher.registerStore(mockStore);
         Dispatcher.registerStore(delayedStore);
-        Dispatcher.registerStore(promiseStore);
     });
 
     it('should not bleed between requires', function () {
@@ -61,7 +59,7 @@ describe('Dispatchr', function () {
     });
 
     describe('#getStore', function () {
-        it('should give the same store instance', function () {
+        it('should give me the same store instance', function () {
             var dispatcher = new Dispatcher({}),
                 mockStoreInstance = dispatcher.getStore('Store');
 
@@ -103,36 +101,11 @@ describe('Dispatchr', function () {
             });
         });
 
-        it('should dispatch to store and return a promise if no callback is passed', function (done) {
-            var context = {test: 'test'},
-                dispatcher = new Dispatcher(context);
-
-            dispatcher.dispatch('NAVIGATE', {}).promise.then(function () {
-                expect(dispatcher.storeInstances).to.be.an('object');
-                expect(dispatcher.storeInstances.Store).to.be.an('object');
-                var mockStore = dispatcher.storeInstances.Store;
-                expect(mockStore.dispatcher).to.equal(dispatcher);
-                var state = mockStore.getState();
-                expect(state.called).to.equal(true);
-                expect(state.page).to.equal('home');
-                done();
-            }, done);
-        });
-
         it('should allow stores to wait for other stores', function (done) {
             var context = {test: 'test'},
                 dispatcher = new Dispatcher(context);
 
             dispatcher.dispatch('DELAY', {}, function () {
-                done();
-            });
-        });
-
-        it('should allow stores to wait for other stores using promises', function (done) {
-            var context = {test: 'test'},
-                dispatcher = new Dispatcher(context);
-
-            dispatcher.dispatch('DELAY_PROMISE', {}, function () {
                 done();
             });
         });
@@ -171,17 +144,6 @@ describe('Dispatchr', function () {
             var dispatcher = new Dispatcher({});
 
             dispatcher.dispatch('ERROR', {}, function (err) {
-                expect(err).to.be.an('object');
-                done();
-            });
-        });
-
-        it('should reject the promise with error if the store returned error', function (done) {
-            var dispatcher = new Dispatcher({});
-
-            dispatcher.dispatch('ERROR', {}).promise.then(function (err) {
-                done(new Error('The dispatch method did not reject the error that the store returned.'));
-            }, function (err) {
                 expect(err).to.be.an('object');
                 done();
             });

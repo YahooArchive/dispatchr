@@ -3,8 +3,7 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 var util = require('util'),
-    EventEmitter = require('events').EventEmitter,
-    Promise = require('es6-promise').Promise;
+    EventEmitter = require('events').EventEmitter;
 
 function Store(context, initialState) {
     this.context = context;
@@ -42,21 +41,6 @@ Store.prototype.delay = function (payload, done) {
     });
 };
 
-Store.prototype.delayPromise = function () {
-    var self = this;
-    self.state.called = true;
-    return new Promise(function (fulfill, reject) {
-        self.dispatcher.waitFor('PromiseStore').then(function () {
-            var delayedStore = self.dispatcher.getStore('PromiseStore');
-            if (!delayedStore.getState().final) {
-                reject(new Error('Promise store didn\'t finish first!'));
-            }
-            self.state.page = 'delayPromise';
-            fulfill();
-        }, reject);
-    });
-};
-
 Store.prototype.getState = function () {
     return this.state;
 };
@@ -64,7 +48,6 @@ Store.prototype.getState = function () {
 Store.handlers = {
     'NAVIGATE': 'navigate',
     'DELAY': 'delay',
-    'DELAY_PROMISE': 'delayPromise',
     'ERROR': 'error'
 };
 
