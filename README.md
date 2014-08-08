@@ -50,13 +50,13 @@ Waits for another store's handler to finish before calling the callback. This is
   * `stores`: A string or array of strings of store names to wait for
   * `callback`: Called after all stores have fully handled the action
 
-### toJSON()
+### dehydrate()
 
 Returns a serializable object containing the state of the Dispatchr instance as well as all stores that have been used since instantiation. This is useful for serializing the state of the application to send it to the client.
 
 ### rehydrate(dispatcherState)
 
-Takes an object representing the state of the Dispatchr instance (usually retrieved from toJSON) to rehydrate the instance as well as the store instance state.
+Takes an object representing the state of the Dispatchr instance (usually retrieved from dehydrate) to rehydrate the instance as well as the store instance state.
 
 ## Store Interface
 
@@ -64,9 +64,10 @@ Dispatchr expects that your stores use the following interface:
 
 ### Constructor
 
-The store should have a constructor function that will be used to instantiate your store using `new Store(context, initialState)` where the parameters are as follows:
+The store should have a constructor function that will be used to instantiate your store using `new Store(dispatcherInterface)` where the parameters are as follows:
 
   * `dispatcherInterface`: An object providing access to dispatcher's waitFor and getStore functions
+  * `dispatcherInterface.getContext()`: Retrieve the context object that was passed
   * `dispatcherInterface.getStore(store)`
   * `dispatcherInterface.waitFor(store[], callback)`
 
@@ -125,7 +126,7 @@ ExampleStore.prototype.getState = function () {
 };
 ```
 
-### toJSON()
+### dehydrate()
 
 The store can optionally define this function to customize the dehydration of the store. It should return a serializable data object that will be passed to the client.
 

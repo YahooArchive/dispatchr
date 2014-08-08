@@ -28,7 +28,7 @@ DelayedStore.prototype.getState = function () {
     return this.state;
 };
 
-DelayedStore.prototype.toJSON = function () {
+DelayedStore.prototype.dehydrate = function () {
     return this.state;
 };
 

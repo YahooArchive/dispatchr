@@ -110,7 +110,7 @@ describe('Dispatchr', function () {
         });
     });
 
-    describe('#toJSON', function () {
+    describe('#dehydrate', function () {
         var context,
             expectedState,
             dispatcher;
@@ -133,7 +133,7 @@ describe('Dispatchr', function () {
 
         it('should dehydrate correctly', function () {
             dispatcher.dispatch('DELAY', {});
-            var state = dispatcher.toJSON();
+            var state = dispatcher.dehydrate();
                 expect(state).to.deep.equal(expectedState);
         });
 
