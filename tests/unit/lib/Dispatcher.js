@@ -85,91 +85,28 @@ describe('Dispatchr', function () {
     });
 
     describe('#dispatch', function () {
-        it('should dispatch to store', function (done) {
+        it('should dispatch to store', function () {
             var context = {test: 'test'},
                 dispatcher = new Dispatcher(context);
 
-            dispatcher.dispatch('NAVIGATE', {}, function (err) {
-                expect(dispatcher.storeInstances).to.be.an('object');
-                expect(dispatcher.storeInstances.Store).to.be.an('object');
-                var mockStore = dispatcher.storeInstances.Store;
-                expect(mockStore.dispatcher).to.equal(dispatcher);
-                var state = mockStore.getState();
-                expect(state.called).to.equal(true);
-                expect(state.page).to.equal('home');
-                done(err);
-            });
+            dispatcher.dispatch('NAVIGATE', {});
+            expect(dispatcher.storeInstances).to.be.an('object');
+            expect(dispatcher.storeInstances.Store).to.be.an('object');
+            var mockStore = dispatcher.storeInstances.Store;
+            expect(mockStore.dispatcher).to.be.an('object');
+            expect(mockStore.dispatcher.getStore).to.be.a('function');
+            expect(mockStore.dispatcher.waitFor).to.be.a('function');
+            var state = mockStore.getState();
+            expect(state.called).to.equal(true);
+            expect(state.page).to.equal('home');
         });
 
-        it('should allow stores to wait for other stores', function (done) {
+        it('should allow stores to wait for other stores', function () {
             var context = {test: 'test'},
                 dispatcher = new Dispatcher(context);
 
-            dispatcher.dispatch('DELAY', {}, function () {
-                done();
-            });
-        });
-
-        it('should handle one action at a time', function (done) {
-            var context = {test: 'test'},
-                dispatcher = new Dispatcher(context),
-                delayFinished = false;
-
-            dispatcher.dispatch('DELAY', {}, function () {
-                delayFinished = true;
-            });
-
-            dispatcher.dispatch('NAVIGATE', {}, function () {
-                if (delayFinished) {
-                    done();
-                } else {
-                    done(new Error('DELAY action did not finish first.'));
-                }
-            });
-        });
-
-        it('should asynchronously call back if no actions registered', function (done) {
-            var dispatcher = new Dispatcher({}),
-                callbackCalled = false;
-
-            dispatcher.dispatch('INVALID', {}, function () {
-                callbackCalled = true;
-                done();
-            });
-
-            expect(callbackCalled).to.equal(false);
-        });
-
-        it('should call the callback with error if the store returned error', function (done) {
-            var dispatcher = new Dispatcher({});
-
-            dispatcher.dispatch('ERROR', {}, function (err) {
-                expect(err).to.be.an('object');
-                done();
-            });
-        });
-    });
-
-    describe('#waitFor', function () {
-        it('should call the callback with error if the store returned error', function (done) {
-            var dispatcher = new Dispatcher({});
-
-            dispatcher.dispatch('ERROR', {}, function (err) {
-                expect(err).to.be.an('object');
-                done();
-            });
-
-            dispatcher.waitFor('Store', function (err) {
-                expect(err).to.be.an('object');
-            });
-        });
-
-        it('should throw if there is no action being handled', function () {
-            var dispatcher = new Dispatcher({});
-
-            expect(function () {
-                dispatcher.waitFor(['MockStore']);
-            }).to.throw(Error);
+            dispatcher.dispatch('DELAY', {});
+            expect(dispatcher.getStore('Store').getState().page).to.equal('delay');
         });
     });
 
@@ -180,7 +117,6 @@ describe('Dispatchr', function () {
         beforeEach(function () {
             context = { test: 'test' };
             expectedState = {
-                context: context,
                 stores: {
                     Store: {
                         called: true,
@@ -195,12 +131,10 @@ describe('Dispatchr', function () {
             dispatcher = new Dispatcher(context);
         });
 
-        it('should dehydrate correctly', function (done) {
-            dispatcher.dispatch('DELAY', {}, function () {
-                var state = dispatcher.toJSON();
-                    expect(state).to.deep.equal(expectedState);
-                done();
-            });
+        it('should dehydrate correctly', function () {
+            dispatcher.dispatch('DELAY', {});
+            var state = dispatcher.toJSON();
+                expect(state).to.deep.equal(expectedState);
         });
 
         it('should rehydrate correctly', function () {
@@ -209,7 +143,9 @@ describe('Dispatchr', function () {
             expect(dispatcher.storeInstances).to.be.an('object');
             expect(dispatcher.storeInstances.Store).to.be.an('object');
             var mockStore = dispatcher.storeInstances.Store;
-            expect(mockStore.dispatcher).to.equal(dispatcher);
+            expect(mockStore.dispatcher).to.be.an('object');
+            expect(mockStore.dispatcher.getStore).to.be.a('function');
+            expect(mockStore.dispatcher.waitFor).to.be.a('function');
             var state = mockStore.getState();
             expect(state.called).to.equal(true);
             expect(state.page).to.equal('delay');
