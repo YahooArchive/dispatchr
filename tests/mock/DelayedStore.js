@@ -5,33 +5,35 @@
 var util = require('util'),
     EventEmitter = require('events').EventEmitter;
 
-function DelayedStore(context) {
-    this.called = false;
-    this.context = context;
-    this.state = {
-        final: false
-    };
+function DelayedStore(dispatcher) {
+    this.dispatcher = dispatcher;
+    this.getInitialState();
 }
 
 DelayedStore.storeName = 'DelayedStore';
 util.inherits(DelayedStore, EventEmitter);
 
-DelayedStore.prototype.delay = function (payload, done) {
+DelayedStore.prototype.getInitialState = function () {
+    this.state = {};
+};
+
+DelayedStore.prototype.delay = function (payload) {
     var self = this;
     self.called = true;
     self.state.page = 'delay';
-    setTimeout(function () {
-        self.state.final = true;
-        done();
-    }, 10);
+    self.state.final = true;
 };
 
 DelayedStore.prototype.getState = function () {
     return this.state;
 };
 
-DelayedStore.prototype.toJSON = function () {
+DelayedStore.prototype.dehydrate = function () {
     return this.state;
+};
+
+DelayedStore.prototype.rehydrate = function (state) {
+    this.state = state;
 };
 
 DelayedStore.handlers = {

@@ -32,13 +32,12 @@ Creates a new instance of Dispatchr with the following parameters:
 
  * `context`: A context object that will be made available to all stores. Useful for request or session level settings.
 
-### dispatch(actionName, payload, callback)
+### dispatch(actionName, payload)
 
 Dispatches an action, in turn calling all stores that have registered to handle this action.
 
  * `actionName`: The name of the action to handle (should map to store action handlers)
  * `payload`: An object containing action information.
- * `callback`: A function that will be called when the action has been fully handled by all stores
 
 ### getStore(storeName)
 
@@ -51,13 +50,13 @@ Waits for another store's handler to finish before calling the callback. This is
   * `stores`: A string or array of strings of store names to wait for
   * `callback`: Called after all stores have fully handled the action
 
-### toJSON()
+### dehydrate()
 
 Returns a serializable object containing the state of the Dispatchr instance as well as all stores that have been used since instantiation. This is useful for serializing the state of the application to send it to the client.
 
 ### rehydrate(dispatcherState)
 
-Takes an object representing the state of the Dispatchr instance (usually retrieved from toJSON) to rehydrate the instance as well as the store instance state.
+Takes an object representing the state of the Dispatchr instance (usually retrieved from dehydrate) to rehydrate the instance as well as the store instance state.
 
 ## Store Interface
 
@@ -65,14 +64,17 @@ Dispatchr expects that your stores use the following interface:
 
 ### Constructor
 
-The store should have a constructor function that will be used to instantiate your store using `new Store(context, initialState)` where the parameters are as follows:
+The store should have a constructor function that will be used to instantiate your store using `new Store(dispatcherInterface)` where the parameters are as follows:
 
-  * `context`: The context object that was passed to Dispatchr's constructor.
-  * `initialState`: The initialState of the store (generally used during rehydration)
+  * `dispatcherInterface`: An object providing access to dispatcher's waitFor and getStore functions
+  * `dispatcherInterface.getContext()`: Retrieve the context object that was passed
+  * `dispatcherInterface.getStore(store)`
+  * `dispatcherInterface.waitFor(store[], callback)`
 
 ```js
-function ExampleStore(context, initialState) {
-    this.navigating = false;
+function ExampleStore(dispatcher) {
+    this.dispatcher = dispatcher;
+    this.getInitialState();
 }
 ```
 
@@ -104,13 +106,11 @@ ExampleStore.handlers = {
 The handler function will be passed two parameters:
 
   * `payload`: An object containing action information.
-  * `done`: A function to be called when the action has been fully handled by the store
 
 ```js
-ExampleStore.prototype.handleNavigate = function (payload, done) {
+ExampleStore.prototype.handleNavigate = function (payload) {
     this.navigating = true;
     this.emit('change'); // Component may be listening for changes to state
-    done(); // Action has been fully handled
 };
 ```
 
@@ -126,19 +126,13 @@ ExampleStore.prototype.getState = function () {
 };
 ```
 
-### setDispatcher(dispatcher)
-
-The store can optionally define this function that will receive the Dispatchr instance after instantiation of the store. This gives the store access to functions like `waitFor` and `getStore` to call other stores.
-
-```js
-ExampleStore.prototype.setDispatcher = function (dispatcher) {
-    this.dispatcher = dispatcher;
-};
-```
-
-### toJSON()
+### dehydrate()
 
 The store can optionally define this function to customize the dehydration of the store. It should return a serializable data object that will be passed to the client.
+
+### rehydrate(state)
+
+The store can optionally define this function to customize the rehydration of the store. It should restore the store to the original state using the passed `state`.
 
 ## License
 
