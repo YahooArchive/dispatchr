@@ -6,7 +6,7 @@
 'use strict';
 
 var expect = require('chai').expect,
-    Dispatcher = require('../../../lib/Dispatcher')(),
+    Dispatcher = require('../../../index')(),
     mockStore = require('../../mock/Store'),
     delayedStore = require('../../mock/DelayedStore');
 
