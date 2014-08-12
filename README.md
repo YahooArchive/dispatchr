@@ -1,4 +1,4 @@
-# Dispatchr [![Build Status](https://travis-ci.org/yahoo/dispatchr.svg?branch=master)](https://travis-ci.org/yahoo/dispatchr) [![Dependency Status](https://david-dm.org/yahoo/dispatchr.svg)](https://david-dm.org/yahoo/dispatchr)
+# Dispatchr [![Build Status](https://travis-ci.org/yahoo/dispatchr.svg?branch=master)](https://travis-ci.org/yahoo/dispatchr) [![Dependency Status](https://david-dm.org/yahoo/dispatchr.svg)](https://david-dm.org/yahoo/dispatchr) [![Coverage Status](https://coveralls.io/repos/yahoo/dispatchr/badge.png?branch=cover)](https://coveralls.io/r/yahoo/dispatchr?branch=cover)
 
 A [Flux](http://facebook.github.io/react/docs/flux-overview.html) dispatcher for applications that run on the server and the client.
 
