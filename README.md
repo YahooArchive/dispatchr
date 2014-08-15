@@ -59,7 +59,12 @@ Takes an object representing the state of the Dispatchr instance (usually retrie
 
 ## Store Interface
 
-Dispatchr expects that your stores use the following interface:
+We have provided utilities for creating stores in a couple of forms:
+
+* `require('dispatchr/utils/createStore')` returns a `React.createClass`-like function for creating stores.
+* `require('dispatchr/utils/BaseStore')` returns an extendable class.
+
+You are not required to use these if you want to keep your stores completely decoupled from the dispatcher. Dispatchr expects that your stores use the following interface:
 
 ### Constructor
 
@@ -70,10 +75,14 @@ The store should have a constructor function that will be used to instantiate yo
   * `dispatcherInterface.getStore(store)`
   * `dispatcherInterface.waitFor(store[], callback)`
 
+  The constructor is also where the initial state of the store should be initialized.
+
 ```js
 function ExampleStore(dispatcher) {
     this.dispatcher = dispatcher;
-    this.getInitialState();
+    if (this.initialize) {
+        this.initialize();
+    }
 }
 ```
 
@@ -113,25 +122,27 @@ ExampleStore.prototype.handleNavigate = function (payload) {
 };
 ```
 
-### getState()
+### dehydrate()
 
-The store should implement this function that will return a serializable data object that can be transferred from the server to the client and also be used by your components.
+The store should define this function to dehydrate the store if it will be shared between server and client. It should return a serializable data object that will be passed to the client.
 
 ```js
-ExampleStore.prototype.getState = function () {
+ExampleStore.prototype.dehydrate = function () {
     return {
         navigating: this.navigating
     };
 };
 ```
 
-### dehydrate()
-
-The store can optionally define this function to customize the dehydration of the store. It should return a serializable data object that will be passed to the client.
-
 ### rehydrate(state)
 
-The store can optionally define this function to customize the rehydration of the store. It should restore the store to the original state using the passed `state`.
+The store should define this function to rehydrate the store if it will be shared between server and client. It should restore the store to the original state using the passed `state`.
+
+```js
+ExampleStore.prototype.rehydrate = function (state) {
+    this.navigating = state.navigating;
+};
+```
 
 ## License
 
