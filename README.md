@@ -21,9 +21,9 @@ dispatcher.dispatch('NAVIGATE', {});
 
 ## Differences from [Facebook's Flux Dispatcher](https://github.com/facebook/flux/blob/master/examples/flux-chat/js/dispatcher/Dispatcher.js)
 
-Dispatchr's main goal is to facilitate server-side rendering of Flux applications while also working on the client-side to encourage code reuse. In order to isolates stores between requests on the server-side, we have opted to make the dispatcher and stores classes that are instantiated per request. They stores are still singletons within the scope of a request though.
+Dispatchr's main goal is to facilitate server-side rendering of Flux applications while also working on the client-side to encourage code reuse. In order to isolate stores between requests on the server-side, we have opted to instantiate the dispatcher and stores classes per request.
 
-In addition, action registration is done by stores as a unit rather than individual callbacks. This allows us to lazily instantiate stores as the events that they handle are dispatched. Since instantiation of stores is handled by the Dispatcher, we can keep track of the stores that were used during a request and dehydrate their state to the client when the server has completed its execution.
+In addition, action registration is done by stores as a unit rather than individual callbacks. This allows us to lazily instantiate stores as the events that they handle are dispatched. Since instantiation of stores is handled by the dispatcher, we can keep track of the stores that were used during a request and dehydrate their state to the client when the server has completed its execution.
 
 Lastly, we are able to enforce the Flux flow by restricting access to the dispatcher from stores. Instead of stores directly requiring a singleton dispatcher, we pass a dispatcher interface to the constructor of the stores to provide access to only the functions that should be available to it: `waitFor` and `getStore`. This prevents the stores from dispatching an entirely new action, which should only be done by action creators to enforce the unidirectional flow that is Flux.
 
