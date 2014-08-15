@@ -10,6 +10,7 @@ var util = require('util'),
 
 /**
  * Helper for creating a store class
+ * @method createStore
  * @param {Object} spec
  * @param {String} spec.storeName The name of the store
  * @param {Object} spec.handlers Hash of action name to method name of action handlers

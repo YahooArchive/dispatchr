@@ -10,6 +10,7 @@ var util = require('util'),
 
 /**
  * @class BaseStore
+ * @extends EventEmitter
  * @param dispatcher The dispatcher interface
  * @constructor
  */
@@ -24,6 +25,7 @@ util.inherits(BaseStore, EventEmitter);
 
 /**
  * Add a listener for the change event
+ * @method addChangeListener
  * @param {Function} callback
  */
 BaseStore.prototype.addChangeListener = function(callback) {
@@ -32,6 +34,7 @@ BaseStore.prototype.addChangeListener = function(callback) {
 
 /**
  * Remove a listener for the change event
+ * @method removeChangeListener
  * @param {Function} callback
  */
 BaseStore.prototype.removeChangeListener = function(callback) {
@@ -40,6 +43,7 @@ BaseStore.prototype.removeChangeListener = function(callback) {
 
 /**
  * Emit a change event
+ * @method emitChange
  */
 BaseStore.prototype.emitChange = function() {
   this.emit(CHANGE_EVENT);
