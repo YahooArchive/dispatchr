@@ -3,18 +3,17 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 var util = require('util'),
-    EventEmitter = require('events').EventEmitter,
+    BaseStore = require('../../utils/BaseStore'),
     DelayedStore = require('./DelayedStore');
 
 function Store(dispatcher) {
-    this.dispatcher = dispatcher;
-    this.getInitialState();
+    BaseStore.call(this, dispatcher);
 }
 
 Store.storeName = 'Store';
-util.inherits(Store, EventEmitter);
+util.inherits(Store, BaseStore);
 
-Store.prototype.getInitialState = function () {
+Store.prototype.initialize = function () {
     this.state = {
         called: false
     };
@@ -38,6 +37,10 @@ Store.prototype.delay = function (payload) {
 };
 
 Store.prototype.getState = function () {
+    return this.state;
+};
+
+Store.prototype.dehydrate = function () {
     return this.state;
 };
 
