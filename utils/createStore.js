@@ -34,8 +34,8 @@ module.exports = function createStore(spec) {
             Store[prop] = spec.statics[prop];
         });
     }
-    Store.storeName = spec.storeName;
-    Store.handlers = spec.handlers;
+    Store.storeName = spec.storeName || Store.storeName;
+    Store.handlers = spec.handlers || Store.handlers;
 
     Object.keys(spec).forEach(function (prop) {
         if (-1 !== IGNORE_ON_PROTOTYPE.indexOf(prop)) {
