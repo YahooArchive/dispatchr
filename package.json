@@ -20,7 +20,7 @@
     }
   ],
   "dependencies": {
-    "debug": "^1.0.0"
+    "debug": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^1.9.1",
