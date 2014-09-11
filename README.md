@@ -19,7 +19,7 @@ dispatcher.dispatch('NAVIGATE', {});
 // Action has been handled fully
 ```
 
-## Differences from [Facebook's Flux Dispatcher](https://github.com/facebook/flux/blob/master/examples/flux-chat/js/dispatcher/Dispatcher.js)
+## Differences from [Facebook's Flux Dispatcher](https://github.com/facebook/flux/blob/master/src/Dispatcher.js)
 
 Dispatchr's main goal is to facilitate server-side rendering of Flux applications while also working on the client-side to encourage code reuse. In order to isolate stores between requests on the server-side, we have opted to instantiate the dispatcher and stores classes per request.
 
