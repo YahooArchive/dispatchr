@@ -111,7 +111,7 @@ ExampleStore.storeName = 'ExampleStore';
 
 ### handlers
 
-The store should define a static property that maps action names to handler function names. These functions will be called in the event that an action has been dispatched by the Dispatchr instance.
+The store should define a static property that maps action names to handler functions or method names. These functions will be called in the event that an action has been dispatched by the Dispatchr instance.
 
 ```js
 ExampleStore.handlers = {
@@ -127,6 +127,18 @@ The handler function will be passed one parameter:
 ExampleStore.prototype.handleNavigate = function (payload) {
     this.navigating = true;
     this.emit('change'); // Component may be listening for changes to state
+};
+```
+
+If you prefer to define private methods for handling actions, you can use a static function instead of a method name. This function will be bound to the store instance when it is called:
+
+```js
+ExampleStore.handlers = {
+    'NAVIGATE': function handleNavigate(payload) {
+        // bound to store instance
+        this.navigating = true;
+        this.emit('change');
+    }
 };
 ```
 

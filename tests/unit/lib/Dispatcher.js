@@ -31,7 +31,7 @@ describe('Dispatchr', function () {
         expect(Dispatcher.handlers.NAVIGATE).to.be.an('array');
         expect(Dispatcher.handlers.NAVIGATE.length).to.equal(1);
         expect(Dispatcher.handlers.NAVIGATE[0].name).to.equal('Store');
-        expect(Dispatcher.handlers.NAVIGATE[0].handler).to.equal('navigate');
+        expect(Dispatcher.handlers.NAVIGATE[0].handler).be.a('function');
     });
 
     describe('#registerStore', function () {
