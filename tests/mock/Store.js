@@ -19,11 +19,6 @@ Store.prototype.initialize = function () {
     };
 };
 
-Store.prototype.navigate = function (payload) {
-    this.state.called = true;
-    this.state.page = 'home';
-};
-
 Store.prototype.delay = function (payload) {
     var self = this;
     self.state.called = true;
@@ -49,7 +44,10 @@ Store.prototype.rehydrate = function (state) {
 };
 
 Store.handlers = {
-    'NAVIGATE': 'navigate',
+    'NAVIGATE': function navigate() {
+        this.state.called = true;
+        this.state.page = 'home';
+    },
     'DELAY': 'delay',
     'ERROR': 'error'
 };
