@@ -6,7 +6,17 @@
 
 var util = require('util'),
     BaseStore = require('./BaseStore'),
-    IGNORE_ON_PROTOTYPE = ['statics', 'storeName', 'handlers'];
+    IGNORE_ON_PROTOTYPE = ['statics', 'storeName', 'handlers', 'mixins'],
+    STORE_SPEC = {
+        initialize: 'DEFINE_MANY'
+    };
+
+function createChainedFunction(one, two) {
+    return function chainedFunction() {
+        one.apply(this, arguments);
+        two.apply(this, arguments);
+    };
+}
 
 /**
  * Helper for creating a store class
@@ -36,6 +46,7 @@ module.exports = function createStore(spec) {
     }
     Store.storeName = spec.storeName || Store.storeName;
     Store.handlers = spec.handlers || Store.handlers;
+    Store.mixins = spec.mixins || Store.mixins;
 
     Object.keys(spec).forEach(function (prop) {
         if (-1 !== IGNORE_ON_PROTOTYPE.indexOf(prop)) {
@@ -43,6 +54,26 @@ module.exports = function createStore(spec) {
         }
         Store.prototype[prop] = spec[prop];
     });
+
+    if (Store.mixins) {
+        Store.mixins.forEach(function(mixin) {
+            Object.keys(mixin).forEach(function (prop) {
+                if (STORE_SPEC[prop] === 'DEFINE_MANY') {
+                    if (!Store.prototype[prop]) {
+                        Store.prototype[prop] = mixin[prop];
+                    } else {
+                        Store.prototype[prop] = createChainedFunction(Store.prototype[prop], mixin[prop]);
+                    }
+                } else {
+                    if (!Store.prototype[prop]) {
+                        Store.prototype[prop] = mixin[prop];
+                    } else {
+                        throw new Error('Mixin property collision for property "' + prop + '"');
+                    }
+                }
+            });
+        });
+    }
 
     return Store;
 };
