@@ -51,6 +51,7 @@ describe('createStore', function () {
                     mixins: [ExampleMixin]
                 },
                 initialize: function() {
+                    expect(mixin_initialize_called).to.equal(true);
                     base_initialize_called = true;
                 },
                 test: function(param) {
