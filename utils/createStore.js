@@ -6,10 +6,7 @@
 
 var util = require('util'),
     BaseStore = require('./BaseStore'),
-    IGNORE_ON_PROTOTYPE = ['statics', 'storeName', 'handlers', 'mixins'],
-    STORE_SPEC = {
-        initialize: 'DEFINE_MANY'
-    };
+    IGNORE_ON_PROTOTYPE = ['statics', 'storeName', 'handlers', 'mixins'];
 
 function createChainedFunction(one, two) {
     return function chainedFunction() {
@@ -58,7 +55,7 @@ module.exports = function createStore(spec) {
     if (Store.mixins) {
         Store.mixins.forEach(function(mixin) {
             Object.keys(mixin).forEach(function (prop) {
-                if (STORE_SPEC[prop] === 'DEFINE_MANY') {
+                if ('initialize' === prop) {
                     if (!Store.prototype[prop]) {
                         Store.prototype[prop] = mixin[prop];
                     } else {
