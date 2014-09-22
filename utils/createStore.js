@@ -15,6 +15,27 @@ function createChainedFunction(one, two) {
     };
 }
 
+function mixInto(dest, src) {
+    Object.keys(src).forEach(function (prop) {
+        if (-1 !== IGNORE_ON_PROTOTYPE.indexOf(prop)) {
+            return;
+        }
+        if ('initialize' === prop) {
+            if (!dest[prop]) {
+                dest[prop] = src[prop];
+            } else {
+                dest[prop] = createChainedFunction(dest[prop], src[prop]);
+            }
+        } else {
+            if (!dest[prop]) {
+                dest[prop] = src[prop];
+            } else {
+                throw new Error('Mixin property collision for property "' + prop + '"');
+            }
+        }
+    });
+}
+
 /**
  * Helper for creating a store class
  * @method createStore
@@ -45,32 +66,12 @@ module.exports = function createStore(spec) {
     Store.handlers = spec.handlers || Store.handlers;
     Store.mixins = spec.mixins || Store.mixins;
 
-    Object.keys(spec).forEach(function (prop) {
-        if (-1 !== IGNORE_ON_PROTOTYPE.indexOf(prop)) {
-            return;
-        }
-        Store.prototype[prop] = spec[prop];
-    });
-
     if (Store.mixins) {
         Store.mixins.forEach(function(mixin) {
-            Object.keys(mixin).forEach(function (prop) {
-                if ('initialize' === prop) {
-                    if (!Store.prototype[prop]) {
-                        Store.prototype[prop] = mixin[prop];
-                    } else {
-                        Store.prototype[prop] = createChainedFunction(Store.prototype[prop], mixin[prop]);
-                    }
-                } else {
-                    if (!Store.prototype[prop]) {
-                        Store.prototype[prop] = mixin[prop];
-                    } else {
-                        throw new Error('Mixin property collision for property "' + prop + '"');
-                    }
-                }
-            });
+            mixInto(Store.prototype, mixin);
         });
     }
+    mixInto(Store.prototype, spec);
 
     return Store;
 };
