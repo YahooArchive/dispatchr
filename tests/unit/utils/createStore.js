@@ -83,7 +83,7 @@ describe('createStore', function () {
                     mixins: [ExampleMixin]
                 },
                 test: function() {}
-            })
+            });
         }).to.throw(Error);
     });
 });
