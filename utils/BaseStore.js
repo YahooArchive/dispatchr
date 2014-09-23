@@ -46,7 +46,7 @@ BaseStore.prototype.removeChangeListener = function(callback) {
  * @method emitChange
  */
 BaseStore.prototype.emitChange = function() {
-  this.emit(CHANGE_EVENT);
+  this.emit(CHANGE_EVENT, this.constructor);
 };
 
 module.exports = BaseStore;
