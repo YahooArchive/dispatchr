@@ -67,12 +67,7 @@ Takes an object representing the state of the Dispatchr instance (usually retrie
 
 ## Store Interface
 
-We have provided utilities for creating stores in a couple of forms:
-
-* `require('dispatchr/utils/createStore')` returns a `React.createClass`-like function for creating stores.
-* `require('dispatchr/utils/BaseStore')` returns an extendable class.
-
-You are not required to use these if you want to keep your stores completely decoupled from the dispatcher. Dispatchr expects that your stores use the following interface:
+We have provided [utilities for creating stores](#helper-utilities) but you are not required to use these if you want to keep your stores completely decoupled from the dispatcher. Dispatchr only expects that your stores use the following interface:
 
 ### Constructor
 
@@ -162,6 +157,46 @@ The store should define this function to rehydrate the store if it will be share
 ExampleStore.prototype.rehydrate = function (state) {
     this.navigating = state.navigating;
 };
+```
+
+## Helper Utilities
+
+These utilities make creating stores less verbose and provide some `change` related functions that are common amongst all store implementations.
+
+### BaseStore
+
+`require('dispatchr/utils/BaseStore')` provides a base store class for extending. Provides `emitChange`, `addChangeListener`, and `removeChangeListener` functions. Example:
+
+```js
+var util = require('util');
+var BaseStore = require('dispatchr/utils/BaseStore');
+var MyStore = function (dispatcherInterface) {
+    BaseStore.apply(this, arguments);
+};
+util.inherits(MyStore, BaseStore);
+MyStore.storeName = 'MyStore';
+MyStore.handlers = {
+    'NAVIGATE': function (payload) { ... this.emitChange() ... }
+};
+MyStore.prototype.getFoo = function () { ... }
+module.exports = MyStore;
+```
+
+### createStore
+
+`require('dispatchr/utils/createStore')` provides a helper function for creating stores similar to React's `createClass` function. The created store class will extend BaseStore and have the same built-in functions. Example:
+
+```js
+var createStore = require('dispatchr/utils/createStore');
+var MyStore = createStore({
+    initialize: function () {}, // Called immediately after instantiation
+    storeName: 'MyStore',
+    handlers: {
+        'NAVIGATE': function (payload) { ... this.emitChange() ... }
+    }
+    foo: function () { ... }
+});
+module.exports = MyStore;
 ```
 
 ## License
