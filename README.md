@@ -110,7 +110,8 @@ The store should define a static property that maps action names to handler func
 
 ```js
 ExampleStore.handlers = {
-    'NAVIGATE': 'handleNavigate'
+    'NAVIGATE': 'handleNavigate',
+    'default': 'defaultHandler' // Called for any action that has not been otherwise handled
 };
 ```
 
