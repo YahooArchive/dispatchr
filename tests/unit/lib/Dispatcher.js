@@ -108,6 +108,32 @@ describe('Dispatchr', function () {
             dispatcher.dispatch('DELAY', {});
             expect(dispatcher.getStore('Store').getState().page).to.equal('delay');
         });
+
+        it('should call stores that registered a default action', function () {
+            var context = {test: 'test'},
+                dispatcher = new Dispatcher(context);
+
+            dispatcher.dispatch('NAVIGATE', {});
+            expect(dispatcher.getStore(delayedStore).defaultCalled).to.equal(true);
+            expect(dispatcher.getStore(delayedStore).actionHandled).to.equal('NAVIGATE');
+        });
+
+        it('should call stores that registered a default action that has no other handlers', function () {
+            var context = {test: 'test'},
+                dispatcher = new Dispatcher(context);
+
+            dispatcher.dispatch('FOO', {});
+            expect(dispatcher.getStore(delayedStore).defaultCalled).to.equal(true);
+            expect(dispatcher.getStore(delayedStore).actionHandled).to.equal('FOO');
+        });
+
+        it('should not call the default handler if store has explicit action handler', function () {
+            var context = {test: 'test'},
+                dispatcher = new Dispatcher(context);
+            dispatcher.dispatch('DELAY', {});
+            expect(dispatcher.getStore(delayedStore).defaultCalled).to.equal(false);
+            expect(dispatcher.getStore(delayedStore).actionHandled).to.equal(null);
+        });
     });
 
     describe('#dehydrate', function () {

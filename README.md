@@ -110,16 +110,18 @@ The store should define a static property that maps action names to handler func
 
 ```js
 ExampleStore.handlers = {
-    'NAVIGATE': 'handleNavigate'
+    'NAVIGATE': 'handleNavigate',
+    'default': 'defaultHandler' // Called for any action that has not been otherwise handled
 };
 ```
 
-The handler function will be passed one parameter:
+The handler function will be passed two parameters:
 
   * `payload`: An object containing action information.
+  * `actionName`: The name of the action. This is primarily useful when using the `default` handler
 
 ```js
-ExampleStore.prototype.handleNavigate = function (payload) {
+ExampleStore.prototype.handleNavigate = function (payload, actionName) {
     this.navigating = true;
     this.emit('change'); // Component may be listening for changes to state
 };
@@ -129,7 +131,7 @@ If you prefer to define private methods for handling actions, you can use a stat
 
 ```js
 ExampleStore.handlers = {
-    'NAVIGATE': function handleNavigate(payload) {
+    'NAVIGATE': function handleNavigate(payload, actionName) {
         // bound to store instance
         this.navigating = true;
         this.emit('change');
