@@ -115,6 +115,7 @@ describe('Dispatchr', function () {
 
             dispatcher.dispatch('NAVIGATE', {});
             expect(dispatcher.getStore(delayedStore).defaultCalled).to.equal(true);
+            expect(dispatcher.getStore(delayedStore).actionHandled).to.equal('NAVIGATE');
         });
 
         it('should call stores that registered a default action that has no other handlers', function () {
@@ -123,6 +124,7 @@ describe('Dispatchr', function () {
 
             dispatcher.dispatch('FOO', {});
             expect(dispatcher.getStore(delayedStore).defaultCalled).to.equal(true);
+            expect(dispatcher.getStore(delayedStore).actionHandled).to.equal('FOO');
         });
 
         it('should not call the default handler if store has explicit action handler', function () {
@@ -130,6 +132,7 @@ describe('Dispatchr', function () {
                 dispatcher = new Dispatcher(context);
             dispatcher.dispatch('DELAY', {});
             expect(dispatcher.getStore(delayedStore).defaultCalled).to.equal(false);
+            expect(dispatcher.getStore(delayedStore).actionHandled).to.equal(null);
         });
     });
 

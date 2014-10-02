@@ -14,9 +14,11 @@ module.exports = createStore({
         this.state = {};
         this.called = false;
         this.defaultCalled = false;
+        this.actionHandled = null;
     },
-    'default': function () {
+    'default': function (payload, actionName) {
         this.defaultCalled = true;
+        this.actionHandled = actionName;
     },
     delay: function (payload) {
         var self = this;
