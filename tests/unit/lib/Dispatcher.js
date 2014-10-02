@@ -114,7 +114,14 @@ describe('Dispatchr', function () {
                 dispatcher = new Dispatcher(context);
 
             dispatcher.dispatch('NAVIGATE', {});
-            dispatcher.dispatch('NAVIGATE', {});
+            expect(dispatcher.getStore(delayedStore).defaultCalled).to.equal(true);
+        });
+
+        it('should call stores that registered a default action that has no other handlers', function () {
+            var context = {test: 'test'},
+                dispatcher = new Dispatcher(context);
+
+            dispatcher.dispatch('FOO', {});
             expect(dispatcher.getStore(delayedStore).defaultCalled).to.equal(true);
         });
 
