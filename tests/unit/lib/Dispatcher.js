@@ -35,9 +35,21 @@ describe('Dispatchr', function () {
     });
 
     describe('#registerStore', function () {
-        it('should throw if store is already registered', function () {
+        it('should throw if store name is already registered', function () {
             expect(function () {
                 Dispatcher.registerStore(function Store () {});
+            }).to.throw(Error);
+        });
+
+        it('should not throw if store is registered twice (should silently do nothing)', function () {
+            Dispatcher.registerStore(mockStore);
+            expect(Dispatcher.stores).to.be.an('object');
+            expect(Dispatcher.stores.Store).to.be.a('function');
+        });
+
+        it('should throw if store is not a constructor', function () {
+            expect(function () {
+                Dispatcher.registerStore('store');
             }).to.throw(Error);
         });
     });
