@@ -146,6 +146,14 @@ describe('Dispatchr', function () {
             expect(dispatcher.getStore(delayedStore).defaultCalled).to.equal(false);
             expect(dispatcher.getStore(delayedStore).actionHandled).to.equal(null);
         });
+
+        it('should not swallow errors raised by store handler', function () {
+            var context = {test: 'test'},
+                dispatcher = new Dispatcher(context);
+            expect(function () {
+                dispatcher.dispatch('ERROR', {});
+            }).to.throw();
+        });
     });
 
     describe('#dehydrate', function () {
