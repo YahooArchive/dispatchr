@@ -57,11 +57,10 @@ module.exports = function createStore(spec) {
 
     util.inherits(Store, BaseStore);
 
-    if (spec.statics) {
-        Object.keys(spec.statics).forEach(function (prop) {
-            Store[prop] = spec.statics[prop];
-        });
-    }
+    Object.keys(spec.statics).forEach(function (prop) {
+        Store[prop] = spec.statics[prop];
+    });
+
     Store.storeName = spec.storeName || Store.storeName;
     Store.handlers = spec.handlers || Store.handlers;
     Store.mixins = spec.mixins || Store.mixins;
