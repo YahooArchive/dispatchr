@@ -28,7 +28,7 @@ util.inherits(BaseStore, EventEmitter);
  * @method addChangeListener
  * @param {Function} callback
  */
-BaseStore.prototype.addChangeListener = function(callback) {
+BaseStore.prototype.addChangeListener = function addChangeListener(callback) {
   this.on(CHANGE_EVENT, callback);
 };
 
@@ -37,16 +37,17 @@ BaseStore.prototype.addChangeListener = function(callback) {
  * @method removeChangeListener
  * @param {Function} callback
  */
-BaseStore.prototype.removeChangeListener = function(callback) {
+BaseStore.prototype.removeChangeListener = function removeChangeListener(callback) {
   this.removeListener(CHANGE_EVENT, callback);
 };
 
 /**
  * Emit a change event
  * @method emitChange
+ * @param {*} param=this
  */
-BaseStore.prototype.emitChange = function() {
-  this.emit(CHANGE_EVENT, this.constructor);
+BaseStore.prototype.emitChange = function emitChange(param) {
+  this.emit(CHANGE_EVENT, param || this);
 };
 
 module.exports = BaseStore;
