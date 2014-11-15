@@ -29,7 +29,7 @@ Lastly, we are able to enforce the Flux flow by restricting access to the dispat
 
 ## Dispatcher Interface
 
-### registerStore(store)
+### registerStore(storeClass)
 
 A static method to register stores to the Dispatcher class making them available to handle actions and be accessible through `getStore` on Dispatchr instances.
 
@@ -46,15 +46,20 @@ Dispatches an action, in turn calling all stores that have registered to handle 
  * `actionName`: The name of the action to handle (should map to store action handlers)
  * `payload`: An object containing action information.
 
-### getStore(storeName)
+### getStore(storeClass)
 
-Retrieve a store instance by name. Allows access to stores from components or stores from other stores.
+Retrieve a store instance by class. Allows access to stores from components or stores from other stores.
 
-### waitFor(stores, callback)
+```js
+var store = require('./stores/MessageStore');
+dispatcher.getStore(store);
+```
+
+### waitFor(storeClasses, callback)
 
 Waits for another store's handler to finish before calling the callback. This is useful from within stores if they need to wait for other stores to finish first.
 
-  * `stores`: A string or array of strings of store names to wait for
+  * `storeClasses`: An array of store classes to wait for
   * `callback`: Called after all stores have fully handled the action
 
 ### dehydrate()
@@ -75,8 +80,8 @@ The store should have a constructor function that will be used to instantiate yo
 
   * `dispatcherInterface`: An object providing access to dispatcher's waitFor and getStore functions
   * `dispatcherInterface.getContext()`: Retrieve the context object that was passed
-  * `dispatcherInterface.getStore(store)`
-  * `dispatcherInterface.waitFor(store[], callback)`
+  * `dispatcherInterface.getStore(storeClass)`
+  * `dispatcherInterface.waitFor(storeClass[], callback)`
 
   The constructor is also where the initial state of the store should be initialized.
 
@@ -98,7 +103,7 @@ util.inherits(ExampleStore, EventEmitter);
 
 ### storeName
 
-The store should define a static property that gives the name of the store. This is used for accessing stores from the dispatcher via `dispatcher.getStore(name)`.
+The store should define a static property that gives the name of the store. This is used internally and for debugging purposes.
 
 ```js
 ExampleStore.storeName = 'ExampleStore';
