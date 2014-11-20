@@ -3,10 +3,12 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 'use strict';
+var util = require('util');
+var BaseStore = require('./BaseStore');
 
-var util = require('util'),
-    BaseStore = require('./BaseStore'),
-    IGNORE_ON_PROTOTYPE = ['statics', 'storeName', 'handlers', 'mixins'];
+
+var IGNORE_ON_PROTOTYPE = ['statics', 'storeName', 'handlers', 'mixins'];
+
 
 function createChainedFunction(one, two) {
     return function chainedFunction() {
@@ -15,26 +17,32 @@ function createChainedFunction(one, two) {
     };
 }
 
+
 function mixInto(dest, src) {
     Object.keys(src).forEach(function (prop) {
         if (-1 !== IGNORE_ON_PROTOTYPE.indexOf(prop)) {
             return;
         }
+
         if ('initialize' === prop) {
             if (!dest[prop]) {
                 dest[prop] = src[prop];
-            } else {
+            }
+            else {
                 dest[prop] = createChainedFunction(dest[prop], src[prop]);
             }
-        } else {
+        }
+        else {
             if (!dest[prop]) {
                 dest[prop] = src[prop];
-            } else {
+            }
+            else {
                 throw new Error('Mixin property collision for property "' + prop + '"');
             }
         }
     });
 }
+
 
 /**
  * Helper for creating a store class
@@ -48,9 +56,11 @@ function mixInto(dest, src) {
  */
 module.exports = function createStore(spec) {
     spec.statics = spec.statics || {};
+
     if (!spec.storeName && !spec.statics.storeName) {
         throw new Error('createStore called without a storeName');
     }
+
     var Store = function (dispatcher) {
         BaseStore.call(this, dispatcher);
     };
@@ -66,10 +76,11 @@ module.exports = function createStore(spec) {
     Store.mixins = spec.mixins || Store.mixins;
 
     if (Store.mixins) {
-        Store.mixins.forEach(function(mixin) {
+        Store.mixins.forEach(function (mixin) {
             mixInto(Store.prototype, mixin);
         });
     }
+
     mixInto(Store.prototype, spec);
 
     return Store;
