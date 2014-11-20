@@ -3,10 +3,12 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 'use strict';
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
 
-var util = require('util'),
-    EventEmitter = require('events').EventEmitter,
-    CHANGE_EVENT = 'change';
+
+var CHANGE_EVENT = 'change';
+
 
 /**
  * @class BaseStore
@@ -16,6 +18,7 @@ var util = require('util'),
  */
 function BaseStore(dispatcher) {
     this.dispatcher = dispatcher;
+
     if (this.initialize) {
         this.initialize();
     }
@@ -29,7 +32,7 @@ util.inherits(BaseStore, EventEmitter);
  * @param {Function} callback
  */
 BaseStore.prototype.addChangeListener = function(callback) {
-  this.on(CHANGE_EVENT, callback);
+    this.on(CHANGE_EVENT, callback);
 };
 
 /**
@@ -38,7 +41,7 @@ BaseStore.prototype.addChangeListener = function(callback) {
  * @param {Function} callback
  */
 BaseStore.prototype.removeChangeListener = function(callback) {
-  this.removeListener(CHANGE_EVENT, callback);
+    this.removeListener(CHANGE_EVENT, callback);
 };
 
 /**
@@ -46,7 +49,7 @@ BaseStore.prototype.removeChangeListener = function(callback) {
  * @method emitChange
  */
 BaseStore.prototype.emitChange = function() {
-  this.emit(CHANGE_EVENT, this.constructor);
+    this.emit(CHANGE_EVENT, this.constructor);
 };
 
 module.exports = BaseStore;
