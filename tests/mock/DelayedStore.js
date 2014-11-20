@@ -4,6 +4,7 @@
  */
 var createStore = require('../../utils/createStore');
 
+
 module.exports = createStore({
     storeName: 'DelayedStore',
     handlers: {
@@ -21,10 +22,9 @@ module.exports = createStore({
         this.actionHandled = actionName;
     },
     delay: function (payload) {
-        var self = this;
-        self.called = true;
-        self.state.page = 'delay';
-        self.state.final = true;
+        this.called = true;
+        this.state.page = 'delay';
+        this.state.final = true;
     },
     getState: function () {
         return this.state;
