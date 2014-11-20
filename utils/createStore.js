@@ -27,16 +27,13 @@ function mixInto(dest, src) {
         if ('initialize' === prop) {
             if (!dest[prop]) {
                 dest[prop] = src[prop];
-            }
-            else {
+            } else {
                 dest[prop] = createChainedFunction(dest[prop], src[prop]);
             }
-        }
-        else {
+        } else {
             if (!dest[prop]) {
                 dest[prop] = src[prop];
-            }
-            else {
+            } else {
                 throw new Error('Mixin property collision for property "' + prop + '"');
             }
         }
