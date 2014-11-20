@@ -3,46 +3,57 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 var util = require('util');
-var createStore = require('../../utils/createStore');
+var BaseStore = require('../../utils/BaseStore');
 var DelayedStore = require('./DelayedStore');
 
+function Store(dispatcher) {
+    BaseStore.call(this, dispatcher);
+}
 
-module.exports = createStore({
-    storeName: 'Store',
-    handlers: {
-        'NAVIGATE': function navigate() {
-            this.state.called = true;
-            this.state.page = 'home';
-        },
-        'DELAY': 'delay',
-        'ERROR': 'error'
-    },
-    initialize: function () {
-        this.state = {
-            called: false
-        };
-    },
-    delay: function (payload) {
-        var self = this;
-        self.state.called = true;
+Store.storeName = 'Store';
 
-        self.dispatcher.waitFor(DelayedStore, function () {
-            var delayedStore = self.dispatcher.getStore(DelayedStore);
+util.inherits(Store, BaseStore);
 
-            if (!delayedStore.getState().final) {
-                throw new Error('Delayed store didn\'t finish first!');
-            }
+Store.prototype.initialize = function () {
+    this.state = {
+        called: false
+    };
+};
 
-            self.state.page = 'delay';
-        });
+Store.prototype.delay = function (payload) {
+    var self = this;
+    self.state.called = true;
+
+    self.dispatcher.waitFor(DelayedStore, function () {
+        var delayedStore = self.dispatcher.getStore(DelayedStore);
+
+        if (!delayedStore.getState().final) {
+            throw new Error('Delayed store didn\'t finish first!');
+        }
+
+        self.state.page = 'delay';
+    });
+};
+
+Store.prototype.getState = function () {
+    return this.state;
+};
+
+Store.prototype.dehydrate = function () {
+    return this.state;
+};
+
+Store.prototype.rehydrate = function (state) {
+    this.state = state;
+};
+
+Store.handlers = {
+    'NAVIGATE': function navigate() {
+        this.state.called = true;
+        this.state.page = 'home';
     },
-    getState: function () {
-        return this.state;
-    },
-    dehydrate: function () {
-        return this.state;
-    },
-    rehydrate: function (state) {
-        this.state = state;
-    }
-});
+    'DELAY': 'delay',
+    'ERROR': 'error'
+};
+
+module.exports = Store;
