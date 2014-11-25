@@ -31,6 +31,10 @@ Store.prototype.delay = function (payload) {
     });
 };
 
+Store.prototype.dispatch = function (payload) {
+    payload.dispatcher.dispatch('DISPATCH_IN_DISPATCH');
+};
+
 Store.prototype.getState = function () {
     return this.state;
 };
@@ -49,7 +53,8 @@ Store.handlers = {
         this.state.page = 'home';
     },
     'DELAY': 'delay',
-    'ERROR': 'error'
+    'ERROR': 'error',
+    'DISPATCH': 'dispatch'
 };
 
 module.exports = Store;
