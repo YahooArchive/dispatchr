@@ -154,6 +154,17 @@ describe('Dispatchr', function () {
                 dispatcher.dispatch('ERROR', {});
             }).to.throw();
         });
+
+        it('should throw if a dispatch called within dispatch', function () {
+            var context = {test: 'test'},
+                dispatcher = new Dispatcher(context);
+
+            expect(function () {
+                dispatcher.dispatch('DISPATCH', {
+                    dispatcher: dispatcher
+                });
+            }).to.throw();
+        });
     });
 
     describe('#dehydrate', function () {
