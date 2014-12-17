@@ -178,7 +178,7 @@ These utilities make creating stores less verbose and provide some `change` rela
 
 ### BaseStore
 
-`require('dispatchr/utils/BaseStore')` provides a base store class for extending. Provides `emitChange`, `addChangeListener`, and `removeChangeListener` functions. Example:
+`require('dispatchr/utils/BaseStore')` provides a base store class for extending. Provides `getContext`, `emitChange`, `addChangeListener`, and `removeChangeListener` functions. Example:
 
 ```js
 var util = require('util');
@@ -191,7 +191,7 @@ MyStore.storeName = 'MyStore';
 MyStore.handlers = {
     'NAVIGATE': function (payload) { ... this.emitChange() ... }
 };
-MyStore.prototype.getFoo = function () { ... }
+MyStore.prototype.getFoo = function () { var context = this.getContext(), ... }
 module.exports = MyStore;
 ```
 
