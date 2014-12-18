@@ -4,9 +4,9 @@
  */
 'use strict';
 
-var util = require('util'),
-    EventEmitter = require('events').EventEmitter,
-    CHANGE_EVENT = 'change';
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
+var CHANGE_EVENT = 'change';
 
 /**
  * @class BaseStore
@@ -22,6 +22,15 @@ function BaseStore(dispatcher) {
 }
 
 util.inherits(BaseStore, EventEmitter);
+
+/**
+ * Convenience method for getting the store context object.
+ * @method getContext
+ * @return {Object} Returns the store context object.
+ */
+BaseStore.prototype.getContext = function getContext() {
+  return this.dispatcher.getContext();
+};
 
 /**
  * Add a listener for the change event
