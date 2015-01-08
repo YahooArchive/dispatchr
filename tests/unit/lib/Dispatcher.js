@@ -5,16 +5,18 @@
 /*globals describe,it,before,beforeEach */
 'use strict';
 
-var expect = require('chai').expect,
-    Dispatcher = require('../../../index')(),
-    mockStore = require('../../mock/Store'),
-    delayedStore = require('../../mock/DelayedStore');
+var expect = require('chai').expect;
+var Dispatcher = require('../../../index')();
+var mockStore = require('../../mock/Store');
+var delayedStore = require('../../mock/DelayedStore');
+var noDehydrateStore = require('../../mock/NoDehydrate');
 
 describe('Dispatchr', function () {
 
     before(function () {
         Dispatcher.registerStore(mockStore);
         Dispatcher.registerStore(delayedStore);
+        Dispatcher.registerStore(noDehydrateStore);
     });
 
     it('should not bleed between requires', function () {
@@ -29,7 +31,7 @@ describe('Dispatchr', function () {
         expect(Dispatcher.stores.Store).to.be.a('function');
         expect(Dispatcher.handlers).to.be.an('object');
         expect(Dispatcher.handlers.NAVIGATE).to.be.an('array');
-        expect(Dispatcher.handlers.NAVIGATE.length).to.equal(1);
+        expect(Dispatcher.handlers.NAVIGATE.length).to.equal(2);
         expect(Dispatcher.handlers.NAVIGATE[0].name).to.equal('Store');
         expect(Dispatcher.handlers.NAVIGATE[0].handler).be.a('function');
     });
@@ -191,7 +193,7 @@ describe('Dispatchr', function () {
         it('should dehydrate correctly', function () {
             dispatcher.dispatch('DELAY', {});
             var state = dispatcher.dehydrate();
-                expect(state).to.deep.equal(expectedState);
+            expect(state).to.deep.equal(expectedState);
         });
 
         it('should rehydrate correctly', function () {
@@ -206,6 +208,17 @@ describe('Dispatchr', function () {
             var state = mockStore.getState();
             expect(state.called).to.equal(true);
             expect(state.page).to.equal('delay');
+        });
+    });
+
+    describe('#shouldDehydrate', function () {
+        it('should not dehydrate stores that return false from shouldDehydrate', function () {
+            var dispatcher = new Dispatcher();
+            dispatcher.dispatch('NAVIGATE', {});
+            var state = dispatcher.dehydrate();
+            expect(state.stores).to.be.an('object');
+            expect(state.stores.Store).be.an('object');
+            expect(state.stores.NoDehydrateStore).to.equal(undefined);
         });
     });
 
