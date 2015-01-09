@@ -27,11 +27,10 @@ function mixInto(dest, src) {
                 dest[prop] = createChainedFunction(dest[prop], src[prop]);
             }
         } else {
-            if (!dest[prop]) {
-                dest[prop] = src[prop];
-            } else {
+            if (dest.hasOwnProperty(prop)) {
                 throw new Error('Mixin property collision for property "' + prop + '"');
             }
+            dest[prop] = src[prop];
         }
     });
 }

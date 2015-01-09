@@ -172,9 +172,19 @@ ExampleStore.prototype.rehydrate = function (state) {
 };
 ```
 
+### shouldDehydrate()
+
+The store can optionally define this function to control whether the store state should be dehydrated by the dispatcher. This method should return a boolean. If this function is undefined, the store will always be dehydrated (just as if true was returned from method).
+
+```js
+ExampleStore.prototype.shouldDehydrate = function () {
+    return true;
+}
+```
+
 ## Helper Utilities
 
-These utilities make creating stores less verbose and provide some `change` related functions that are common amongst all store implementations.
+These utilities make creating stores less verbose and provide some `change` related functions that are common amongst all store implementations. These store helpers also implement a basic `shouldDehydrate` function that returns true if `emitChange` has been called by the store and false otherwise.
 
 ### BaseStore
 

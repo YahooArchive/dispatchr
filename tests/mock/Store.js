@@ -28,11 +28,13 @@ Store.prototype.delay = function (payload) {
             throw new Error('Delayed store didn\'t finish first!');
         }
         self.state.page = 'delay';
+        self.emitChange();
     });
 };
 
 Store.prototype.dispatch = function (payload) {
     payload.dispatcher.dispatch('DISPATCH_IN_DISPATCH');
+    this.emitChange();
 };
 
 Store.prototype.getState = function () {
@@ -51,6 +53,7 @@ Store.handlers = {
     'NAVIGATE': function navigate() {
         this.state.called = true;
         this.state.page = 'home';
+        this.emitChange();
     },
     'DELAY': 'delay',
     'ERROR': 'error',

@@ -69,7 +69,7 @@ describe('createStore', function () {
 
     it('should error on mixin conflict', function () {
         var mock = {
-                dispatcher: {dispatcher: true},
+                dispatcher: {dispatcher: true}
             },
             ExampleMixin = {
                 test: function() {}

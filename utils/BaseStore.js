@@ -16,6 +16,7 @@ var CHANGE_EVENT = 'change';
  */
 function BaseStore(dispatcher) {
     this.dispatcher = dispatcher;
+    this._hasChanged = false;
     if (this.initialize) {
         this.initialize();
     }
@@ -29,7 +30,16 @@ util.inherits(BaseStore, EventEmitter);
  * @return {Object} Returns the store context object.
  */
 BaseStore.prototype.getContext = function getContext() {
-  return this.dispatcher.getContext();
+    return this.dispatcher.getContext();
+};
+
+/**
+ * Convenience method for getting the store context object.
+ * @method getContext
+ * @return {Object} Returns the store context object.
+ */
+BaseStore.prototype.getContext = function getContext() {
+    return this.dispatcher.getContext();
 };
 
 /**
@@ -38,7 +48,7 @@ BaseStore.prototype.getContext = function getContext() {
  * @param {Function} callback
  */
 BaseStore.prototype.addChangeListener = function addChangeListener(callback) {
-  this.on(CHANGE_EVENT, callback);
+    this.on(CHANGE_EVENT, callback);
 };
 
 /**
@@ -47,7 +57,18 @@ BaseStore.prototype.addChangeListener = function addChangeListener(callback) {
  * @param {Function} callback
  */
 BaseStore.prototype.removeChangeListener = function removeChangeListener(callback) {
-  this.removeListener(CHANGE_EVENT, callback);
+    this.removeListener(CHANGE_EVENT, callback);
+};
+
+/**
+ * Determines whether the store should dehydrate or not. By default, only dehydrates
+ * if the store has emitted an update event. If no update has been emitted, it is assumed
+ * that the store is in its default state and therefore does not need to dehydrate.
+ * @method shouldDehydrate
+ * @returns {boolean}
+ */
+BaseStore.prototype.shouldDehydrate = function shouldDehydrate() {
+    return this._hasChanged;
 };
 
 /**
@@ -56,7 +77,8 @@ BaseStore.prototype.removeChangeListener = function removeChangeListener(callbac
  * @param {*} param=this
  */
 BaseStore.prototype.emitChange = function emitChange(param) {
-  this.emit(CHANGE_EVENT, param || this);
+    this._hasChanged = true;
+    this.emit(CHANGE_EVENT, param || this);
 };
 
 module.exports = BaseStore;

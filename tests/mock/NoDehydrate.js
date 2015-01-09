@@ -5,10 +5,9 @@
 var createStore = require('../../utils/createStore');
 
 module.exports = createStore({
-    storeName: 'DelayedStore',
+    storeName: 'NoDehydrateStore',
     handlers: {
-        'DELAY': 'delay',
-        'default': 'default'
+        'NAVIGATE': 'navigate'
     },
     initialize: function () {
         this.state = {};
@@ -16,22 +15,16 @@ module.exports = createStore({
         this.defaultCalled = false;
         this.actionHandled = null;
     },
-    'default': function (payload, actionName) {
+    navigate: function (payload, actionName) {
         this.defaultCalled = true;
         this.actionHandled = actionName;
         this.emitChange();
     },
-    delay: function (payload) {
-        this.called = true;
-        this.state.page = 'delay';
-        this.state.final = true;
-        this.emitChange();
-    },
-    getState: function () {
-        return this.state;
+    shouldDehydrate: function () {
+        return false;
     },
     dehydrate: function () {
-        return this.state;
+        throw new Error('Dehydrate should not be called on NoDehydrateStore');
     },
     rehydrate: function (state) {
         this.state = state;
