@@ -37,6 +37,10 @@ Store.prototype.dispatch = function (payload) {
     this.emitChange();
 };
 
+Store.prototype.error = function (payload) {
+    throw new Error(payload.message);
+};
+
 Store.prototype.getState = function () {
     return this.state;
 };
