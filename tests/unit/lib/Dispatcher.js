@@ -10,6 +10,7 @@ var Dispatcher = require('../../../index')();
 var mockStore = require('../../mock/Store');
 var delayedStore = require('../../mock/DelayedStore');
 var noDehydrateStore = require('../../mock/NoDehydrate');
+var DispatchError = require('../../../lib/Error/DispatchError');
 
 describe('Dispatchr', function () {
 
@@ -149,15 +150,15 @@ describe('Dispatchr', function () {
             expect(dispatcher.getStore(delayedStore).actionHandled).to.equal(null);
         });
 
-        it('should not swallow errors raised by store handler', function () {
+        it('should swallow Errors raised by store handler', function () {
             var context = {test: 'test'},
                 dispatcher = new Dispatcher(context);
             expect(function () {
-                dispatcher.dispatch('ERROR', {});
-            }).to.throw();
+                dispatcher.dispatch('ERROR', {message: 'foo'});
+            }).to.not.throw('foo');
         });
 
-        it('should throw if a dispatch called within dispatch', function () {
+        it('should throw DispatchError if a dispatch called within dispatch', function () {
             var context = {test: 'test'},
                 dispatcher = new Dispatcher(context);
 
@@ -165,7 +166,7 @@ describe('Dispatchr', function () {
                 dispatcher.dispatch('DISPATCH', {
                     dispatcher: dispatcher
                 });
-            }).to.throw();
+            }).to.throw(DispatchError);
         });
     });
 
