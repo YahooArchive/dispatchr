@@ -155,6 +155,8 @@ describe('Dispatchr', function () {
             expect(function () {
                 dispatcher.dispatch('ERROR', {});
             }).to.throw();
+            // Should still allow calling another dispatch
+            dispatcher.dispatch('DELAY', {});
         });
 
         it('should throw if a dispatch called within dispatch', function () {
