@@ -34,15 +34,6 @@ BaseStore.prototype.getContext = function getContext() {
 };
 
 /**
- * Convenience method for getting the store context object.
- * @method getContext
- * @return {Object} Returns the store context object.
- */
-BaseStore.prototype.getContext = function getContext() {
-    return this.dispatcher.getContext();
-};
-
-/**
  * Add a listener for the change event
  * @method addChangeListener
  * @param {Function} callback
