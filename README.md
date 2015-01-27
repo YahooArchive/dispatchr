@@ -34,6 +34,7 @@ In addition, action registration is done by stores as a unit rather than individ
 Lastly, we are able to enforce the Flux flow by restricting access to the dispatcher from stores. Instead of stores directly requiring a singleton dispatcher, we pass a dispatcher interface to the constructor of the stores to provide access to only the functions that should be available to it: `waitFor` and `getStore`. This prevents the stores from dispatching an entirely new action, which should only be done by action creators to enforce the unidirectional flow that is Flux.
 
 ## Dispatcher Interface
+[//]: # (API_START)
 
 ### registerStore(storeClass)
 
@@ -221,6 +222,7 @@ var MyStore = createStore({
 });
 module.exports = MyStore;
 ```
+[//]: # (API_STOP)
 
 ## License
 
