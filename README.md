@@ -34,26 +34,30 @@ In addition, action registration is done by stores as a unit rather than individ
 Lastly, we are able to enforce the Flux flow by restricting access to the dispatcher from stores. Instead of stores directly requiring a singleton dispatcher, we pass a dispatcher interface to the constructor of the stores to provide access to only the functions that should be available to it: `waitFor` and `getStore`. This prevents the stores from dispatching an entirely new action, which should only be done by action creators to enforce the unidirectional flow that is Flux.
 
 [//]: # (API_START)
-## Dispatcher Interface
+## Dispatcher API
 
-### registerStore(storeClass)
-
-A static method to register stores to the Dispatcher class making them available to handle actions and be accessible through `getStore` on Dispatchr instances.
-
-### Constructor
+### Constructor(context)
 
 Creates a new Dispatcher instance with the following parameters:
 
  * `context`: A context object that will be made available to all stores. Useful for request or session level settings.
 
-### dispatch(actionName, payload)
+### Static Methods
+
+#### registerStore(storeClass)
+
+A static method to register stores to the Dispatcher class making them available to handle actions and be accessible through `getStore` on Dispatchr instances.
+
+### Instance Methods
+
+#### dispatch(actionName, payload)
 
 Dispatches an action, in turn calling all stores that have registered to handle this action.
 
  * `actionName`: The name of the action to handle (should map to store action handlers)
  * `payload`: An object containing action information.
 
-### getStore(storeClass)
+#### getStore(storeClass)
 
 Retrieve a store instance by class. Allows access to stores from components or stores from other stores.
 
@@ -62,22 +66,24 @@ var store = require('./stores/MessageStore');
 dispatcher.getStore(store);
 ```
 
-### waitFor(storeClasses, callback)
+#### waitFor(storeClasses, callback)
 
 Waits for another store's handler to finish before calling the callback. This is useful from within stores if they need to wait for other stores to finish first.
 
   * `storeClasses`: An array of store classes to wait for
   * `callback`: Called after all stores have fully handled the action
 
-### dehydrate()
+#### dehydrate()
 
 Returns a serializable object containing the state of the Dispatchr instance as well as all stores that have been used since instantiation. This is useful for serializing the state of the application to send it to the client.
 
-### rehydrate(dispatcherState)
+#### rehydrate(dispatcherState)
 
 Takes an object representing the state of the Dispatchr instance (usually retrieved from dehydrate) to rehydrate the instance as well as the store instance state.
 
-## Store Interface
+
+
+## Store API
 
 We have provided [utilities for creating stores](#helper-utilities) but you are not required to use these if you want to keep your stores completely decoupled from the dispatcher. Dispatchr only expects that your stores use the following interface:
 
@@ -107,8 +113,9 @@ It is also recommended to extend an event emitter so that your store can emit `c
 util.inherits(ExampleStore, EventEmitter);
 ```
 
+### Static Properties
 
-### storeName
+#### storeName
 
 The store should define a static property that gives the name of the store. This is used internally and for debugging purposes.
 
@@ -116,7 +123,7 @@ The store should define a static property that gives the name of the store. This
 ExampleStore.storeName = 'ExampleStore';
 ```
 
-### handlers
+#### handlers
 
 The store should define a static property that maps action names to handler functions or method names. These functions will be called in the event that an action has been dispatched by the Dispatchr instance.
 
@@ -151,7 +158,9 @@ ExampleStore.handlers = {
 };
 ```
 
-### dehydrate()
+### Instance Methods
+
+#### dehydrate()
 
 The store should define this function to dehydrate the store if it will be shared between server and client. It should return a serializable data object that will be passed to the client.
 
@@ -163,7 +172,7 @@ ExampleStore.prototype.dehydrate = function () {
 };
 ```
 
-### rehydrate(state)
+#### rehydrate(state)
 
 The store should define this function to rehydrate the store if it will be shared between server and client. It should restore the store to the original state using the passed `state`.
 
@@ -173,7 +182,7 @@ ExampleStore.prototype.rehydrate = function (state) {
 };
 ```
 
-### shouldDehydrate()
+#### shouldDehydrate()
 
 The store can optionally define this function to control whether the store state should be dehydrated by the dispatcher. This method should return a boolean. If this function is undefined, the store will always be dehydrated (just as if true was returned from method).
 
@@ -182,6 +191,8 @@ ExampleStore.prototype.shouldDehydrate = function () {
     return true;
 }
 ```
+
+
 
 ## Helper Utilities
 
@@ -205,6 +216,7 @@ MyStore.handlers = {
 MyStore.prototype.getFoo = function () { var context = this.getContext(), ... }
 module.exports = MyStore;
 ```
+
 
 ### createStore
 
