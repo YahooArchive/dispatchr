@@ -4,8 +4,7 @@
  */
 'use strict';
 
-var util = require('util'),
-    BaseStore = require('./BaseStore'),
+var BaseStore = require('./BaseStore'),
     IGNORE_ON_PROTOTYPE = ['statics', 'storeName', 'handlers', 'mixins'];
 
 function createChainedFunction(one, two) {
@@ -50,12 +49,10 @@ module.exports = function createStore(spec) {
     if (!spec.storeName && !spec.statics.storeName) {
         throw new Error('createStore called without a storeName');
     }
-    var Store = function (dispatcher) {
-        BaseStore.call(this, dispatcher);
-    };
 
-    util.inherits(Store, BaseStore);
+    var Store = BaseStore.create();
 
+    // @deprecated: Statics should not be needed
     Object.keys(spec.statics).forEach(function (prop) {
         Store[prop] = spec.statics[prop];
     });
@@ -66,10 +63,10 @@ module.exports = function createStore(spec) {
 
     if (Store.mixins) {
         Store.mixins.forEach(function(mixin) {
-            mixInto(Store.prototype, mixin);
+            mixInto(Store, mixin);
         });
     }
-    mixInto(Store.prototype, spec);
+    mixInto(Store, spec);
 
     return Store;
 };

@@ -4,32 +4,38 @@
  */
 'use strict';
 
-var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var CHANGE_EVENT = 'change';
+
 
 /**
  * @class BaseStore
  * @extends EventEmitter
+ */
+var BaseStore = Object.create(EventEmitter.prototype);
+
+/**
+ * Creates a new instance
  * @param dispatcher The dispatcher interface
  * @constructor
  */
-function BaseStore(dispatcher) {
-    this.dispatcher = dispatcher;
-    this._hasChanged = false;
-    if (this.initialize) {
-        this.initialize();
+BaseStore.create = function create(dispatcher) {
+    var obj = Object.create(this);
+    obj.dispatcher = dispatcher;
+    obj._hasChanged = false;
+    if (obj.initialize) {
+        obj.initialize();
     }
-}
 
-util.inherits(BaseStore, EventEmitter);
+    return obj;
+}
 
 /**
  * Convenience method for getting the store context object.
  * @method getContext
  * @return {Object} Returns the store context object.
  */
-BaseStore.prototype.getContext = function getContext() {
+BaseStore.getContext = function getContext() {
     return this.dispatcher.getContext();
 };
 
@@ -38,7 +44,7 @@ BaseStore.prototype.getContext = function getContext() {
  * @method addChangeListener
  * @param {Function} callback
  */
-BaseStore.prototype.addChangeListener = function addChangeListener(callback) {
+BaseStore.addChangeListener = function addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
 };
 
@@ -47,7 +53,7 @@ BaseStore.prototype.addChangeListener = function addChangeListener(callback) {
  * @method removeChangeListener
  * @param {Function} callback
  */
-BaseStore.prototype.removeChangeListener = function removeChangeListener(callback) {
+BaseStore.removeChangeListener = function removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
 };
 
@@ -58,7 +64,7 @@ BaseStore.prototype.removeChangeListener = function removeChangeListener(callbac
  * @method shouldDehydrate
  * @returns {boolean}
  */
-BaseStore.prototype.shouldDehydrate = function shouldDehydrate() {
+BaseStore.shouldDehydrate = function shouldDehydrate() {
     return this._hasChanged;
 };
 
@@ -67,7 +73,7 @@ BaseStore.prototype.shouldDehydrate = function shouldDehydrate() {
  * @method emitChange
  * @param {*} param=this
  */
-BaseStore.prototype.emitChange = function emitChange(param) {
+BaseStore.emitChange = function emitChange(param) {
     this._hasChanged = true;
     this.emit(CHANGE_EVENT, param || this);
 };
