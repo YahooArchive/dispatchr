@@ -15,13 +15,13 @@ var dispatcherMock = {
 
 describe('BaseStore', function () {
     it('instantiates correctly', function () {
-        var store = new BaseStore(dispatcherMock);
+        var store = BaseStore.create(dispatcherMock);
         expect(store.dispatcher).to.equal(dispatcherMock);
         expect(store.getContext()).to.equal(dispatcherMock.getContext());
     });
 
     it('allows listening for changes', function (done) {
-        var store = new BaseStore(dispatcherMock);
+        var store = BaseStore.create(dispatcherMock);
         var payloadMock = {
             foo: 'bar'
         };

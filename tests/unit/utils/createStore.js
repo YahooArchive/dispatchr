@@ -23,7 +23,7 @@ describe('createStore', function () {
                     expect(param).to.equal(mock.param);
                 }
             }),
-            store = new ExampleStore(mock.dispatcher);
+            store = ExampleStore.create(mock.dispatcher);
 
         store.test(mock.param);
         expect(ExampleStore.handlers).to.deep.equal(mock.handlers);
@@ -58,7 +58,7 @@ describe('createStore', function () {
                     expect(param).to.equal(mock.param);
                 }
             }),
-            store = new ExampleStore(mock.dispatcher);
+            store = ExampleStore.create(mock.dispatcher);
 
         store.test(mock.param);
         store.mixin_test(mock.param);

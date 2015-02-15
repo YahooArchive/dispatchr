@@ -6,20 +6,17 @@ var util = require('util'),
     BaseStore = require('../../utils/BaseStore'),
     DelayedStore = require('./DelayedStore');
 
-function Store(dispatcher) {
-    BaseStore.call(this, dispatcher);
-}
+var Store = BaseStore.create();
 
 Store.storeName = 'Store';
-util.inherits(Store, BaseStore);
 
-Store.prototype.initialize = function () {
+Store.initialize = function () {
     this.state = {
         called: false
     };
 };
 
-Store.prototype.delay = function (payload) {
+Store.delay = function (payload) {
     var self = this;
     self.state.called = true;
     self.dispatcher.waitFor(DelayedStore, function () {
@@ -32,20 +29,20 @@ Store.prototype.delay = function (payload) {
     });
 };
 
-Store.prototype.dispatch = function (payload) {
+Store.dispatch = function (payload) {
     payload.dispatcher.dispatch('DISPATCH_IN_DISPATCH');
     this.emitChange();
 };
 
-Store.prototype.getState = function () {
+Store.getState = function () {
     return this.state;
 };
 
-Store.prototype.dehydrate = function () {
+Store.dehydrate = function () {
     return this.state;
 };
 
-Store.prototype.rehydrate = function (state) {
+Store.rehydrate = function (state) {
     this.state = state;
 };
 
