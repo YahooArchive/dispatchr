@@ -2,7 +2,7 @@
 "use strict";
 
 var expect = require('chai').expect;
-var BaseStore = require('../../../utils/BaseStore');
+var BaseStore = require('../../../addons/BaseStore');
 
 var contextMock = {
     dimensions: {}
