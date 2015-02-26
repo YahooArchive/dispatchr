@@ -4,7 +4,6 @@
  */
 'use strict';
 
-var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var CHANGE_EVENT = 'change';
 
@@ -22,7 +21,7 @@ function BaseStore(dispatcher) {
     }
 }
 
-util.inherits(BaseStore, EventEmitter);
+BaseStore.prototype = Object.create(EventEmitter.prototype);
 
 /**
  * Convenience method for getting the store context object.
