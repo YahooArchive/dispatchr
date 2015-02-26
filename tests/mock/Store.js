@@ -2,8 +2,7 @@
  * Copyright 2014, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-var util = require('util'),
-    BaseStore = require('../../utils/BaseStore'),
+var BaseStore = require('../../utils/BaseStore'),
     DelayedStore = require('./DelayedStore');
 
 function Store(dispatcher) {
@@ -11,7 +10,7 @@ function Store(dispatcher) {
 }
 
 Store.storeName = 'Store';
-util.inherits(Store, BaseStore);
+Store.prototype = Object.create(BaseStore.prototype);
 
 Store.prototype.initialize = function () {
     this.state = {

@@ -4,8 +4,7 @@
  */
 'use strict';
 
-var util = require('util'),
-    BaseStore = require('./BaseStore'),
+var BaseStore = require('./BaseStore'),
     IGNORE_ON_PROTOTYPE = ['statics', 'storeName', 'handlers', 'mixins'];
 
 function createChainedFunction(one, two) {
@@ -54,7 +53,7 @@ module.exports = function createStore(spec) {
         BaseStore.call(this, dispatcher);
     };
 
-    util.inherits(Store, BaseStore);
+    Store.prototype = Object.create(BaseStore.prototype);
 
     Object.keys(spec.statics).forEach(function (prop) {
         Store[prop] = spec.statics[prop];
