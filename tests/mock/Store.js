@@ -4,7 +4,8 @@
  */
 var util = require('util'),
     BaseStore = require('../../utils/BaseStore'),
-    DelayedStore = require('./DelayedStore');
+    DelayedStore = require('./DelayedStore'),
+    NoDehydrateStore = require('./NoDehydrate');
 
 function Store(dispatcher) {
     BaseStore.call(this, dispatcher);
@@ -28,6 +29,14 @@ Store.prototype.delay = function (payload) {
             throw new Error('Delayed store didn\'t finish first!');
         }
         self.state.page = 'delay';
+        self.emitChange();
+    });
+};
+
+Store.prototype.waitFor = function (payload) {
+    var self = this;
+    self.dispatcher.waitFor(NoDehydrateStore, function () {
+        self.state.called = true;
         self.emitChange();
     });
 };
@@ -57,7 +66,8 @@ Store.handlers = {
     },
     'DELAY': 'delay',
     'ERROR': 'error',
-    'DISPATCH': 'dispatch'
+    'DISPATCH': 'dispatch',
+    'WAITFOR': 'waitFor'
 };
 
 module.exports = Store;
