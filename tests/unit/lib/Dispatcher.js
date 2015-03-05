@@ -123,6 +123,14 @@ describe('Dispatchr', function () {
             expect(dispatcher.getStore('Store').getState().page).to.equal('delay');
         });
 
+        it('should allow stores to wait for other stores even if they do not handle that action', function () {
+            var context = {test: 'test'},
+                dispatcher = new Dispatcher(context);
+
+            dispatcher.dispatch('WAITFOR', {});
+            expect(dispatcher.getStore('Store').getState().called).to.equal(true);
+        });
+
         it('should call stores that registered a default action', function () {
             var context = {test: 'test'},
                 dispatcher = new Dispatcher(context);
