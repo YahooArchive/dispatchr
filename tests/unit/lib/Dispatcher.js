@@ -167,6 +167,17 @@ describe('Dispatchr', function () {
             dispatcher.dispatch('DELAY', {});
         });
 
+        it('should throw if a dispatch called with falsy actionName parameter', function () {
+          var context = {test: 'test'},
+              dispatcher = new Dispatcher(context);
+
+            expect(function () {
+                dispatcher.dispatch(undefined, {
+                    dispatcher: dispatcher
+                });
+            }).to.throw();
+        });
+
         it('should throw if a dispatch called within dispatch', function () {
             var context = {test: 'test'},
                 dispatcher = new Dispatcher(context);
