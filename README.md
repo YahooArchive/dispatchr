@@ -6,7 +6,7 @@
 [![devDependency Status](https://david-dm.org/yahoo/dispatchr/dev-status.svg)](https://david-dm.org/yahoo/dispatchr#info=devDependencies)
 [![Coverage Status](https://coveralls.io/repos/yahoo/dispatchr/badge.png?branch=master)](https://coveralls.io/r/yahoo/dispatchr?branch=master)
 
-A [Flux](http://facebook.github.io/react/docs/flux-overview.html) dispatcher for applications that run on the server and the client.
+A [Flux](http://facebook.github.io/flux/docs/overview.html) dispatcher for applications that run on the server and the client.
 
 ## Usage
 
