@@ -20,7 +20,9 @@
     }
   ],
   "dependencies": {
-    "debug": "^2.0.0"
+    "debug": "^2.0.0",
+    "eventemitter3": "^0.1.6",
+    "inherits": "^2.0.1"
   },
   "devDependencies": {
     "chai": "^1.9.1",
