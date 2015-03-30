@@ -2,7 +2,7 @@
 "use strict";
 
 var expect = require('chai').expect,
-    createStore = require('../../../utils/createStore');
+    createStore = require('../../../addons/createStore');
 
 describe('createStore', function () {
     it('should return a valid Constructor', function () {

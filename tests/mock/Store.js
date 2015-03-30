@@ -3,7 +3,7 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 var util = require('util'),
-    BaseStore = require('../../utils/BaseStore'),
+    BaseStore = require('../../addons/BaseStore'),
     DelayedStore = require('./DelayedStore'),
     NoDehydrateStore = require('./NoDehydrate');
 

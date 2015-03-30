@@ -2,98 +2,99 @@
  * Copyright 2014, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/*globals describe,it,before,beforeEach */
+/*globals describe,it,beforeEach */
 'use strict';
 
 var expect = require('chai').expect;
-var Dispatcher = require('../../../index')();
+var dispatchr = require('../../../index');
 var mockStore = require('../../mock/Store');
 var delayedStore = require('../../mock/DelayedStore');
 var noDehydrateStore = require('../../mock/NoDehydrate');
 
 describe('Dispatchr', function () {
+    var dispatcher;
 
-    before(function () {
-        Dispatcher.registerStore(mockStore);
-        Dispatcher.registerStore(delayedStore);
-        Dispatcher.registerStore(noDehydrateStore);
+    beforeEach(function () {
+        dispatcher = dispatchr.createDispatcher({
+            stores: [mockStore, delayedStore, noDehydrateStore]
+        });
     });
 
     it('should not bleed between requires', function () {
-        var Dispatcher2 = require('../../../lib/Dispatcher')();
+        var Dispatcher2 = require('../../../lib/Dispatcher').createDispatcher();
         expect(Dispatcher2.isRegistered(mockStore)).to.equal(false);
         Dispatcher2.registerStore(delayedStore);
         expect(Dispatcher2.isRegistered(delayedStore)).to.equal(true);
     });
 
     it('should have handlers registered', function () {
-        expect(Dispatcher.stores).to.be.an('object');
-        expect(Dispatcher.stores.Store).to.be.a('function');
-        expect(Dispatcher.handlers).to.be.an('object');
-        expect(Dispatcher.handlers.NAVIGATE).to.be.an('array');
-        expect(Dispatcher.handlers.NAVIGATE.length).to.equal(2);
-        expect(Dispatcher.handlers.NAVIGATE[0].name).to.equal('Store');
-        expect(Dispatcher.handlers.NAVIGATE[0].handler).be.a('function');
+        expect(dispatcher.stores).to.be.an('object');
+        expect(dispatcher.stores.Store).to.be.a('function');
+        expect(dispatcher.handlers).to.be.an('object');
+        expect(dispatcher.handlers.NAVIGATE).to.be.an('array');
+        expect(dispatcher.handlers.NAVIGATE.length).to.equal(2);
+        expect(dispatcher.handlers.NAVIGATE[0].name).to.equal('Store');
+        expect(dispatcher.handlers.NAVIGATE[0].handler).be.a('function');
     });
 
     describe('#registerStore', function () {
         it('should throw if store name is already registered', function () {
             expect(function () {
-                Dispatcher.registerStore(function Store () {});
+                dispatcher.registerStore(function Store () {});
             }).to.throw(Error);
         });
 
         it('should not throw if store is registered twice (should silently do nothing)', function () {
-            Dispatcher.registerStore(mockStore);
-            expect(Dispatcher.stores).to.be.an('object');
-            expect(Dispatcher.stores.Store).to.be.a('function');
+            dispatcher.registerStore(mockStore);
+            expect(dispatcher.stores).to.be.an('object');
+            expect(dispatcher.stores.Store).to.be.a('function');
         });
 
         it('should throw if store is not a constructor', function () {
             expect(function () {
-                Dispatcher.registerStore('store');
+                dispatcher.registerStore('store');
             }).to.throw(Error);
         });
     });
 
     describe('#isRegistered', function () {
         it('should return true if store name is registered', function () {
-            expect(Dispatcher.isRegistered('Store')).to.equal(true);
+            expect(dispatcher.isRegistered('Store')).to.equal(true);
         });
 
         it('should return false if store name is not registered', function () {
-            expect(Dispatcher.isRegistered('foo')).to.equal(false);
+            expect(dispatcher.isRegistered('foo')).to.equal(false);
         });
 
         it('should return false if store with same name is different constructor', function () {
             var store = function () {};
             store.storeName = 'Store';
-            expect(Dispatcher.isRegistered(store)).to.equal(false);
+            expect(dispatcher.isRegistered(store)).to.equal(false);
         });
     });
 
     describe('#getStore', function () {
         it('should give me the same store instance', function () {
-            var dispatcher = new Dispatcher({}),
-                mockStoreInstance = dispatcher.getStore('Store');
+            var dispatcherContext = dispatcher.createContext({}),
+                mockStoreInstance = dispatcherContext.getStore('Store');
 
             expect(mockStoreInstance).to.be.an('object');
 
-            expect(dispatcher.getStore('Store')).to.equal(mockStoreInstance);
+            expect(dispatcherContext.getStore('Store')).to.equal(mockStoreInstance);
         });
         it('should allow passing constructor instead of class name', function () {
-            var dispatcher = new Dispatcher({}),
-                mockStoreInstance = dispatcher.getStore(mockStore);
+            var dispatcherContext = dispatcher.createContext({}),
+                mockStoreInstance = dispatcherContext.getStore(mockStore);
 
             expect(mockStoreInstance).to.be.an('object');
 
-            expect(dispatcher.getStore('Store')).to.equal(mockStoreInstance);
+            expect(dispatcherContext.getStore('Store')).to.equal(mockStoreInstance);
         });
         it('should throw if name is invalid', function () {
-            var dispatcher = new Dispatcher({});
+            var dispatcherContext = dispatcher.createContext({});
 
             expect(function () {
-                dispatcher.getStore('Invalid');
+                dispatcherContext.getStore('Invalid');
             }).to.throw(Error);
         });
     });
@@ -101,12 +102,12 @@ describe('Dispatchr', function () {
     describe('#dispatch', function () {
         it('should dispatch to store', function () {
             var context = {test: 'test'},
-                dispatcher = new Dispatcher(context);
+                dispatcherContext = dispatcher.createContext(context);
 
-            dispatcher.dispatch('NAVIGATE', {});
-            expect(dispatcher.storeInstances).to.be.an('object');
-            expect(dispatcher.storeInstances.Store).to.be.an('object');
-            var mockStore = dispatcher.storeInstances.Store;
+            dispatcherContext.dispatch('NAVIGATE', {});
+            expect(dispatcherContext.storeInstances).to.be.an('object');
+            expect(dispatcherContext.storeInstances.Store).to.be.an('object');
+            var mockStore = dispatcherContext.storeInstances.Store;
             expect(mockStore.dispatcher).to.be.an('object');
             expect(mockStore.dispatcher.getStore).to.be.a('function');
             expect(mockStore.dispatcher.waitFor).to.be.a('function');
@@ -117,74 +118,74 @@ describe('Dispatchr', function () {
 
         it('should allow stores to wait for other stores', function () {
             var context = {test: 'test'},
-                dispatcher = new Dispatcher(context);
+                dispatcherContext = dispatcher.createContext(context);
 
-            dispatcher.dispatch('DELAY', {});
-            expect(dispatcher.getStore('Store').getState().page).to.equal('delay');
+            dispatcherContext.dispatch('DELAY', {});
+            expect(dispatcherContext.getStore('Store').getState().page).to.equal('delay');
         });
 
         it('should allow stores to wait for other stores even if they do not handle that action', function () {
             var context = {test: 'test'},
-                dispatcher = new Dispatcher(context);
+                dispatcherContext = dispatcher.createContext(context);
 
-            dispatcher.dispatch('WAITFOR', {});
-            expect(dispatcher.getStore('Store').getState().called).to.equal(true);
+            dispatcherContext.dispatch('WAITFOR', {});
+            expect(dispatcherContext.getStore('Store').getState().called).to.equal(true);
         });
 
         it('should call stores that registered a default action', function () {
             var context = {test: 'test'},
-                dispatcher = new Dispatcher(context);
+                dispatcherContext = dispatcher.createContext(context);
 
-            dispatcher.dispatch('NAVIGATE', {});
-            expect(dispatcher.getStore(delayedStore).defaultCalled).to.equal(true);
-            expect(dispatcher.getStore(delayedStore).actionHandled).to.equal('NAVIGATE');
+            dispatcherContext.dispatch('NAVIGATE', {});
+            expect(dispatcherContext.getStore(delayedStore).defaultCalled).to.equal(true);
+            expect(dispatcherContext.getStore(delayedStore).actionHandled).to.equal('NAVIGATE');
         });
 
         it('should call stores that registered a default action that has no other handlers', function () {
             var context = {test: 'test'},
-                dispatcher = new Dispatcher(context);
+                dispatcherContext = dispatcher.createContext(context);
 
-            dispatcher.dispatch('FOO', {});
-            expect(dispatcher.getStore(delayedStore).defaultCalled).to.equal(true);
-            expect(dispatcher.getStore(delayedStore).actionHandled).to.equal('FOO');
+            dispatcherContext.dispatch('FOO', {});
+            expect(dispatcherContext.getStore(delayedStore).defaultCalled).to.equal(true);
+            expect(dispatcherContext.getStore(delayedStore).actionHandled).to.equal('FOO');
         });
 
         it('should not call the default handler if store has explicit action handler', function () {
             var context = {test: 'test'},
-                dispatcher = new Dispatcher(context);
-            dispatcher.dispatch('DELAY', {});
-            expect(dispatcher.getStore(delayedStore).defaultCalled).to.equal(false);
-            expect(dispatcher.getStore(delayedStore).actionHandled).to.equal(null);
+                dispatcherContext = dispatcher.createContext(context);
+            dispatcherContext.dispatch('DELAY', {});
+            expect(dispatcherContext.getStore(delayedStore).defaultCalled).to.equal(false);
+            expect(dispatcherContext.getStore(delayedStore).actionHandled).to.equal(null);
         });
 
         it('should not swallow errors raised by store handler', function () {
             var context = {test: 'test'},
-                dispatcher = new Dispatcher(context);
+                dispatcherContext = dispatcher.createContext(context);
             expect(function () {
-                dispatcher.dispatch('ERROR', {});
+                dispatcherContext.dispatch('ERROR', {});
             }).to.throw();
             // Should still allow calling another dispatch
-            dispatcher.dispatch('DELAY', {});
+            dispatcherContext.dispatch('DELAY', {});
         });
 
         it('should throw if a dispatch called with falsy actionName parameter', function () {
           var context = {test: 'test'},
-              dispatcher = new Dispatcher(context);
+              dispatcherContext = dispatcher.createContext(context);
 
             expect(function () {
-                dispatcher.dispatch(undefined, {
-                    dispatcher: dispatcher
+                dispatcherContext.dispatch(undefined, {
+                    dispatcher: dispatcherContext
                 });
             }).to.throw();
         });
 
         it('should throw if a dispatch called within dispatch', function () {
             var context = {test: 'test'},
-                dispatcher = new Dispatcher(context);
+                dispatcherContext = dispatcher.createContext(context);
 
             expect(function () {
-                dispatcher.dispatch('DISPATCH', {
-                    dispatcher: dispatcher
+                dispatcherContext.dispatch('DISPATCH', {
+                    dispatcher: dispatcherContext
                 });
             }).to.throw();
         });
@@ -193,7 +194,7 @@ describe('Dispatchr', function () {
     describe('#dehydrate', function () {
         var context,
             expectedState,
-            dispatcher;
+            dispatcherContext;
         beforeEach(function () {
             context = { test: 'test' };
             expectedState = {
@@ -208,21 +209,21 @@ describe('Dispatchr', function () {
                     }
                 }
             };
-            dispatcher = new Dispatcher(context);
+            dispatcherContext = dispatcher.createContext(context);
         });
 
         it('should dehydrate correctly', function () {
-            dispatcher.dispatch('DELAY', {});
-            var state = dispatcher.dehydrate();
+            dispatcherContext.dispatch('DELAY', {});
+            var state = dispatcherContext.dehydrate();
             expect(state).to.deep.equal(expectedState);
         });
 
         it('should rehydrate correctly', function () {
-            dispatcher.rehydrate(expectedState);
+            dispatcherContext.rehydrate(expectedState);
 
-            expect(dispatcher.storeInstances).to.be.an('object');
-            expect(dispatcher.storeInstances.Store).to.be.an('object');
-            var mockStore = dispatcher.storeInstances.Store;
+            expect(dispatcherContext.storeInstances).to.be.an('object');
+            expect(dispatcherContext.storeInstances.Store).to.be.an('object');
+            var mockStore = dispatcherContext.storeInstances.Store;
             expect(mockStore.dispatcher).to.be.an('object');
             expect(mockStore.dispatcher.getStore).to.be.a('function');
             expect(mockStore.dispatcher.waitFor).to.be.a('function');
@@ -234,9 +235,9 @@ describe('Dispatchr', function () {
 
     describe('#shouldDehydrate', function () {
         it('should not dehydrate stores that return false from shouldDehydrate', function () {
-            var dispatcher = new Dispatcher();
-            dispatcher.dispatch('NAVIGATE', {});
-            var state = dispatcher.dehydrate();
+            var dispatcherContext = dispatcher.createContext();
+            dispatcherContext.dispatch('NAVIGATE', {});
+            var state = dispatcherContext.dehydrate();
             expect(state.stores).to.be.an('object');
             expect(state.stores.Store).be.an('object');
             expect(state.stores.NoDehydrateStore).to.equal(undefined);

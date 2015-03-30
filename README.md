@@ -13,13 +13,13 @@ A [Flux](http://facebook.github.io/flux/docs/overview.html) dispatcher for appli
 For a more detailed example, see our [example application](https://github.com/yahoo/flux-example).
 
 ```js
-var Dispatchr = require('dispatchr')(),
-    ExampleStore = require('./example-store.js'),
-    context = {};
+var ExampleStore = require('./stores/ExampleStore.js');
+var dispatcher = require('dispatchr').createDispatcher({
+    stores: [ExampleStore]
+});
 
-Dispatchr.registerStore(ExampleStore);
-
-var dispatcher = new Dispatchr(context);
+var contextOptions = {};
+var dispatcherContext = dispatcher.createContext(contextOptions);
 
 dispatcher.dispatch('NAVIGATE', {});
 // Action has been handled fully
@@ -41,15 +41,15 @@ These utilities make creating stores less verbose and provide some `change` rela
 
 ### BaseStore
 
-`require('dispatchr/utils/BaseStore')` provides a base store class for extending. Provides `getContext`, `emitChange`, `addChangeListener`, and `removeChangeListener` functions. Example:
+`require('dispatchr/addons/BaseStore')` provides a base store class for extending. Provides `getContext`, `emitChange`, `addChangeListener`, and `removeChangeListener` functions. Example:
 
 ```js
-var util = require('util');
-var BaseStore = require('dispatchr/utils/BaseStore');
+var inherits = require('inherits');
+var BaseStore = require('dispatchr/addons/BaseStore');
 var MyStore = function (dispatcherInterface) {
     BaseStore.apply(this, arguments);
 };
-util.inherits(MyStore, BaseStore);
+inherits(MyStore, BaseStore);
 MyStore.storeName = 'MyStore';
 MyStore.handlers = {
     'NAVIGATE': function (payload) { ... this.emitChange() ... }
@@ -61,10 +61,10 @@ module.exports = MyStore;
 
 ### createStore
 
-`require('dispatchr/utils/createStore')` provides a helper function for creating stores similar to React's `createClass` function. The created store class will extend BaseStore and have the same built-in functions. Example:
+`require('dispatchr/addons/createStore')` provides a helper function for creating stores similar to React's `createClass` function. The created store class will extend BaseStore and have the same built-in functions. Example:
 
 ```js
-var createStore = require('dispatchr/utils/createStore');
+var createStore = require('dispatchr/addons/createStore');
 var MyStore = createStore({
     initialize: function () {}, // Called immediately after instantiation
     storeName: 'MyStore',

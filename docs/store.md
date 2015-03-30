@@ -106,3 +106,92 @@ ExampleStore.prototype.shouldDehydrate = function () {
     return true;
 }
 ```
+
+## Helper Utilities
+
+### BaseStore
+
+A base class that you can extend to reduce boilerplate when creating stores.
+
+```js
+var BaseStore = require('fluxible/addons').BaseStore;
+```
+
+#### Built-In Methods
+
+ * `emitChange()` - emits a 'change' event
+ * `getContext()` - returns the [store context](FluxibleContext.md#store-context)
+ * `addChangeListener(callback)` - simple method to add a change listener
+ * `removeChangeListener(callback)` - removes a change listener
+ * `shouldDehydrate()` - default implementation that returns true if a `change` event has been emitted
+
+```js
+var BaseStore = require('fluxible/addons').BaseStore;
+var util = require('util');
+
+function ApplicationStore(dispatcher) {
+    BaseStore.apply(this, arguments);
+    this.currentPageName = null;
+}
+
+ApplicationStore.storeName = 'ApplicationStore';
+ApplicationStore.handlers = {
+    'RECEIVE_PAGE': 'handleReceivePage'
+};
+
+util.inherits(ApplicationStore, BaseStore);
+
+ApplicationStore.prototype.handleReceivePage = function (payload) {
+    this.currentPageName = payload.pageName;
+    this.emitChange();
+};
+
+ApplicationStore.prototype.getCurrentPageName = function () {
+    return this.currentPageName;
+};
+
+// For sending state to the client
+ApplicationStore.prototype.dehydrate = function () {
+    return {
+        currentPageName: this.currentPageName
+    };
+};
+
+// For rehydrating server state
+ApplicationStore.prototype.rehydrate = function (state) {
+    this.currentPageName = state.currentPageName;
+};
+
+module.exports = ApplicationStore;
+
+```
+
+### createStore
+
+A helper method similar to `React.createClass` but for creating stores that extend `BaseStore`. Also supports mixins.
+
+```js
+var createStore = require('fluxible/addons').createStore;
+
+module.exports = createStore({
+    storeName: 'ApplicationStore',
+    handlers: {
+        'RECEIVE_PAGE': 'handleReceivePage'
+    },
+    handleReceivePage: function (payload) {
+        this.currentPageName = payload.pageName;
+        this.emitChange();
+    },
+    getCurrentPage: function () {
+        return this.currentPageName;
+    },
+    dehydrate: function () {
+        return {
+            currentPageName: this.currentPageName
+        };
+    },
+    rehydrate: function (state) {
+        this.currentPageName = state.currentPageName;
+    }
+});
+
