@@ -1,1 +1,1 @@
-throw new Error("require('fluxible/utils') has moved to require('fluxible/addons')");
+throw new Error("require('dispatchr/utils') has moved to require('dispatchr/addons')");

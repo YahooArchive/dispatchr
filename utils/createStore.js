@@ -1,1 +1,1 @@
-throw new Error("require('fluxible/utils/createStore') has moved to require('fluxible/addons/createStore')");
+throw new Error("require('dispatchr/utils/createStore') has moved to require('dispatchr/addons/createStore')");
