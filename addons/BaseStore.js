@@ -5,7 +5,7 @@
 'use strict';
 
 var inherits = require('inherits');
-var EventEmitter = require('eventemitter3').EventEmitter;
+var EventEmitter = require('eventemitter3');
 var CHANGE_EVENT = 'change';
 
 /**
