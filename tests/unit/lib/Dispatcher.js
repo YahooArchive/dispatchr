@@ -39,8 +39,10 @@ describe('Dispatchr', function () {
 
     describe('#registerStore', function () {
         it('should throw if store name is already registered', function () {
+            var NewStore = function Store () {};
+            NewStore.storeName = 'Store';
             expect(function () {
-                dispatcher.registerStore(function Store () {});
+                dispatcher.registerStore(NewStore);
             }).to.throw(Error);
         });
 
@@ -54,6 +56,17 @@ describe('Dispatchr', function () {
             expect(function () {
                 dispatcher.registerStore('store');
             }).to.throw(Error);
+        });
+
+        it('should warn if registering store that relies on name property', function () {
+            var oldWarn = console.warn;
+            var warning;
+            console.warn = function(message) {
+                warning = message;
+            };
+            dispatcher.registerStore(function NewStore() {});
+            console.warn = oldWarn;
+            expect(warning).to.not.equal(undefined);
         });
     });
 
