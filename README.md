@@ -21,7 +21,7 @@ var dispatcher = require('dispatchr').createDispatcher({
 var contextOptions = {};
 var dispatcherContext = dispatcher.createContext(contextOptions);
 
-dispatcher.dispatch('NAVIGATE', {});
+dispatcherContext.dispatch('NAVIGATE', {});
 // Action has been handled fully
 ```
 
